@@ -1,0 +1,14 @@
+{
+  "name": "behavioral-biomarkers-mvp-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for Behavioral Biomarkers Enhancement Layer MVP",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

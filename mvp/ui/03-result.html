@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Behavioral Biomarkers Dashboard</title>
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+
+		:root {
+			--bg-0: #050a13;
+			--bg-1: #0b1422;
+			--surface: rgba(15, 25, 41, 0.84);
+			--line: rgba(139, 172, 216, 0.24);
+			--text: #edf4ff;
+			--muted: #9cb3d3;
+			--primary: #4cd7da;
+			--accent: #7ea6ff;
+			--ok: #67e7bb;
+			--warn: #ffcb84;
+			--high: #ff8f9e;
+			--radius-xl: 24px;
+			--radius-lg: 16px;
+			--shadow: 0 36px 84px rgba(0, 0, 0, 0.52);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Manrope", "Segoe UI", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(58rem 34rem at -12% -22%, rgba(76, 215, 218, 0.2), transparent 60%),
+				radial-gradient(44rem 30rem at 110% -4%, rgba(126, 166, 255, 0.2), transparent 58%),
+				linear-gradient(150deg, var(--bg-0) 0%, var(--bg-1) 84%);
+			padding: 24px;
+			display: grid;
+			place-items: center;
+		}
+
+		html[dir="rtl"] body {
+			font-family: "Cairo", "Segoe UI", sans-serif;
+		}
+
+		.dashboard {
+			width: min(1160px, 100%);
+			border: 1px solid var(--line);
+			border-radius: var(--radius-xl);
+			background: linear-gradient(180deg, rgba(15, 25, 41, 0.9), rgba(9, 15, 27, 0.95));
+			box-shadow: var(--shadow);
+			overflow: hidden;
+			position: relative;
+			isolation: isolate;
+		}
+
+		.dashboard::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			background-image:
+				linear-gradient(rgba(160, 187, 220, 0.04) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(160, 187, 220, 0.04) 1px, transparent 1px);
+			background-size: 40px 40px;
+			mask-image: radial-gradient(circle at 20% 12%, black 5%, transparent 74%);
+			z-index: -1;
+		}
+
+		.topbar {
+			padding: 18px 24px;
+			border-bottom: 1px solid var(--line);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.badge {
+			width: 36px;
+			height: 36px;
+			border-radius: 10px;
+			display: grid;
+			place-items: center;
+			background: linear-gradient(145deg, var(--primary), var(--accent));
+			color: #04131b;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-weight: 800;
+			box-shadow: 0 9px 24px rgba(76, 215, 218, 0.35);
+		}
+
+		.brand-copy {
+			display: grid;
+			gap: 2px;
+		}
+
+		.brand-title {
+			font-size: 0.95rem;
+			font-weight: 700;
+			letter-spacing: 0.01em;
+		}
+
+		.brand-subtitle {
+			color: var(--muted);
+			font-size: 0.78rem;
+		}
+
+		.lang-switch {
+			display: inline-flex;
+			gap: 6px;
+			padding: 4px;
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			background: rgba(11, 18, 31, 0.72);
+		}
+
+		.lang-btn {
+			border: 0;
+			padding: 6px 11px;
+			border-radius: 999px;
+			font-size: 0.76rem;
+			font-weight: 800;
+			letter-spacing: 0.03em;
+			color: #c2d6f5;
+			background: transparent;
+			cursor: pointer;
+		}
+
+		.lang-btn[aria-pressed="true"] {
+			color: #04131b;
+			background: linear-gradient(145deg, var(--primary), var(--accent));
+		}
+
+		.pill {
+			padding: 8px 12px;
+			border-radius: 999px;
+			border: 1px solid rgba(103, 231, 187, 0.35);
+			background: rgba(103, 231, 187, 0.08);
+			color: #b9fde1;
+			font-size: 0.78rem;
+			font-weight: 700;
+			white-space: nowrap;
+		}
+
+		.content {
+			padding: 24px;
+			display: grid;
+			grid-template-columns: 1.35fr 0.95fr;
+			gap: 20px;
+		}
+
+		.panel {
+			border: 1px solid var(--line);
+			border-radius: var(--radius-lg);
+			background: var(--surface);
+			padding: 22px;
+		}
+
+		.eyebrow {
+			margin: 0;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			font-size: 0.74rem;
+			font-weight: 800;
+			color: var(--primary);
+		}
+
+		html[dir="rtl"] .eyebrow,
+		html[dir="rtl"] .rec-title {
+			text-transform: none;
+			letter-spacing: normal;
+		}
+
+		h1 {
+			margin: 10px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: clamp(1.75rem, 2.35vw, 2.5rem);
+			line-height: 1.1;
+			letter-spacing: -0.015em;
+			max-width: 24ch;
+		}
+
+		.lead {
+			margin: 12px 0 0;
+			color: var(--muted);
+			font-size: 0.95rem;
+			line-height: 1.6;
+			max-width: 64ch;
+		}
+
+		.kpi-grid {
+			margin-top: 18px;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 12px;
+		}
+
+		.story-grid {
+			margin-top: 18px;
+			display: grid;
+			grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+			gap: 12px;
+		}
+
+		.story-card {
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			background: rgba(8, 14, 24, 0.76);
+			padding: 16px;
+		}
+
+		.story-kicker {
+			margin: 0;
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+			color: var(--accent);
+		}
+
+		.story-title {
+			margin: 8px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.15rem;
+			font-weight: 800;
+			line-height: 1.25;
+		}
+
+		.story-copy {
+			margin: 8px 0 0;
+			color: var(--muted);
+			font-size: 0.88rem;
+			line-height: 1.6;
+		}
+
+		.insight-list {
+			margin: 12px 0 0;
+			padding: 0;
+			list-style: none;
+			display: grid;
+			gap: 10px;
+		}
+
+		.insight-item {
+			display: flex;
+			gap: 10px;
+			align-items: flex-start;
+			padding: 10px 12px;
+			border-radius: 14px;
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(139, 172, 216, 0.14);
+		}
+
+		.insight-bullet {
+			width: 9px;
+			height: 9px;
+			border-radius: 999px;
+			margin-top: 6px;
+			flex: 0 0 auto;
+			background: var(--primary);
+			box-shadow: 0 0 0 5px rgba(76, 215, 218, 0.1);
+		}
+
+		.insight-text {
+			margin: 0;
+			color: #d6e4f7;
+			font-size: 0.86rem;
+			line-height: 1.55;
+		}
+
+		.layer-grid {
+			margin-top: 14px;
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 12px;
+		}
+
+		.layer-card {
+			border: 1px solid var(--line);
+			border-radius: 16px;
+			background: linear-gradient(180deg, rgba(17, 29, 47, 0.88), rgba(8, 14, 24, 0.9));
+			padding: 14px;
+		}
+
+		.layer-tag {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			border-radius: 999px;
+			padding: 6px 10px;
+			font-size: 0.72rem;
+			font-weight: 800;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			background: rgba(126, 166, 255, 0.1);
+			border: 1px solid rgba(126, 166, 255, 0.22);
+			color: #d8e5ff;
+		}
+
+		.layer-score {
+			margin: 12px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.8rem;
+			font-weight: 800;
+			line-height: 1;
+		}
+
+		.layer-label {
+			margin: 7px 0 0;
+			font-size: 0.84rem;
+			font-weight: 700;
+			color: #edf4ff;
+		}
+
+		.layer-copy {
+			margin: 7px 0 0;
+			font-size: 0.8rem;
+			line-height: 1.55;
+			color: var(--muted);
+		}
+
+		.signal-bar {
+			margin-top: 10px;
+			height: 10px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.06);
+			overflow: hidden;
+		}
+
+		.signal-fill {
+			height: 100%;
+			border-radius: inherit;
+			background: linear-gradient(90deg, var(--accent), var(--primary));
+		}
+
+		.meta-grid {
+			margin-top: 14px;
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 12px;
+		}
+
+		.meta-card {
+			border: 1px solid var(--line);
+			border-radius: 16px;
+			background: rgba(8, 14, 24, 0.78);
+			padding: 14px;
+		}
+
+		.meta-label {
+			margin: 0;
+			font-size: 0.72rem;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: #8ea7ca;
+			font-weight: 800;
+		}
+
+		.meta-value {
+			margin: 8px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.55rem;
+			font-weight: 800;
+		}
+
+		.meta-copy {
+			margin: 6px 0 0;
+			color: var(--muted);
+			font-size: 0.82rem;
+			line-height: 1.5;
+		}
+
+		.kpi-card {
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			background: rgba(8, 14, 24, 0.78);
+			padding: 14px;
+			display: grid;
+			grid-template-columns: 92px 1fr;
+			gap: 12px;
+			align-items: center;
+		}
+
+		.ring {
+			width: 92px;
+			height: 92px;
+			position: relative;
+			display: grid;
+			place-items: center;
+		}
+
+		.ring svg {
+			width: 92px;
+			height: 92px;
+			transform: rotate(-90deg);
+		}
+
+		.ring-track,
+		.ring-fill {
+			fill: none;
+			stroke-width: 9;
+			cx: 46;
+			cy: 46;
+			r: 36;
+		}
+
+		.ring-track {
+			stroke: rgba(141, 171, 211, 0.2);
+		}
+
+		.ring-fill {
+			stroke: var(--ring-color, var(--primary));
+			stroke-linecap: round;
+			stroke-dasharray: 226.2;
+			stroke-dashoffset: 226.2;
+			transition: stroke-dashoffset 700ms ease;
+			filter: drop-shadow(0 0 9px rgba(76, 215, 218, 0.35));
+		}
+
+		.ring-value {
+			position: absolute;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1rem;
+			font-weight: 800;
+			color: #eef5ff;
+		}
+
+		.kpi-title {
+			margin: 0;
+			font-size: 0.92rem;
+			font-weight: 700;
+			color: #e8f1ff;
+			line-height: 1.35;
+		}
+
+		.kpi-meta {
+			margin: 7px 0 0;
+			color: var(--muted);
+			font-size: 0.82rem;
+			line-height: 1.5;
+		}
+
+		.risk-badge {
+			margin-top: 8px;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			border-radius: 999px;
+			padding: 6px 10px;
+			font-size: 0.76rem;
+			font-weight: 700;
+			border: 1px solid rgba(255, 143, 158, 0.35);
+			background: rgba(255, 143, 158, 0.1);
+			color: #ffd1d8;
+		}
+
+		.recommendations {
+			display: grid;
+			gap: 12px;
+			align-content: start;
+		}
+
+		.rec-card {
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			background: linear-gradient(165deg, rgba(17, 29, 47, 0.9), rgba(8, 14, 24, 0.92));
+			padding: 14px;
+		}
+
+		.rec-title {
+			margin: 0;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-size: 0.72rem;
+			font-weight: 800;
+			color: #8ea7ca;
+		}
+
+		.rec-heading {
+			margin: 8px 0 6px;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: #eff6ff;
+		}
+
+		.rec-copy {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.85rem;
+			line-height: 1.55;
+		}
+
+		.rec-chip {
+			margin-top: 10px;
+			display: inline-flex;
+			border-radius: 999px;
+			border: 1px solid rgba(127, 166, 255, 0.35);
+			background: rgba(127, 166, 255, 0.1);
+			color: #d5e2ff;
+			padding: 5px 10px;
+			font-size: 0.75rem;
+			font-weight: 700;
+		}
+
+		.actions {
+			margin-top: 4px;
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			border-radius: 12px;
+			padding: 12px 16px;
+			font-size: 0.86rem;
+			font-weight: 800;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.btn-primary {
+			border: 0;
+			background: linear-gradient(145deg, var(--primary), #30bfc5);
+			color: #03131b;
+			box-shadow: 0 12px 24px rgba(48, 191, 197, 0.36);
+		}
+
+		.btn-ghost {
+			border: 1px solid rgba(139, 172, 216, 0.35);
+			color: #c7daf7;
+			background: rgba(12, 21, 36, 0.75);
+		}
+
+		html[dir="rtl"] .topbar,
+		html[dir="rtl"] .brand,
+		html[dir="rtl"] .actions {
+			flex-direction: row-reverse;
+		}
+
+		html[dir="rtl"] .kpi-card {
+			grid-template-columns: 1fr 92px;
+		}
+
+		html[dir="rtl"] .kpi-meta,
+		html[dir="rtl"] .lead,
+		html[dir="rtl"] .rec-copy,
+		html[dir="rtl"] .kpi-title,
+		html[dir="rtl"] .rec-heading,
+		html[dir="rtl"] .brand-title,
+		html[dir="rtl"] .brand-subtitle,
+		html[dir="rtl"] .pill,
+		html[dir="rtl"] h1 {
+			text-align: right;
+		}
+
+		@media (max-width: 980px) {
+			.content {
+				grid-template-columns: 1fr;
+			}
+
+			.story-grid,
+			.layer-grid,
+			.meta-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.recommendations {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+
+		@media (max-width: 740px) {
+			body {
+				padding: 12px;
+			}
+
+			.topbar {
+				padding: 14px 15px;
+			}
+
+			.content {
+				padding: 15px;
+			}
+
+			.panel {
+				padding: 16px;
+			}
+
+			.kpi-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.recommendations {
+				grid-template-columns: 1fr;
+			}
+
+			.pill {
+				display: none;
+			}
+
+			.lang-switch {
+				margin-inline-start: auto;
+			}
+
+			.actions {
+				flex-direction: column;
+			}
+
+			.btn {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="dashboard">
+		<header class="topbar">
+			<div class="brand">
+				<span class="badge">BB</span>
+				<div class="brand-copy">
+					<span class="brand-title" data-i18n="brandTitle">Behavioral Biomarkers Dashboard</span>
+					<span class="brand-subtitle" data-i18n="brandSubtitle">Clinical Results Overview</span>
+				</div>
+			</div>
+			<div class="lang-switch" role="group" aria-label="Language switcher">
+				<button class="lang-btn" id="langEn" type="button" data-lang="en" aria-pressed="false">EN</button>
+				<button class="lang-btn" id="langAr" type="button" data-lang="ar" aria-pressed="false">AR</button>
+			</div>
+			<span class="pill" data-i18n="snapshot">Clinician-Ready Snapshot</span>
+		</header>
+
+		<section class="content">
+			<section class="panel">
+				<p class="eyebrow" data-i18n="overview">Outcome Overview</p>
+				<h1 data-i18n="profileTitle">Your behavioral health signal profile</h1>
+				<p class="lead" data-i18n="profileLead">
+					Scores below summarize current behavioral biomarkers and recovery indicators.
+					Use them as guidance for triage planning and focused lifestyle interventions.
+				</p>
+
+				<div class="story-grid">
+					<section class="story-card">
+						<p class="story-kicker" data-i18n="storyKicker">Clinical Interpretation</p>
+						<h2 class="story-title" data-i18n="storyTitle">The pattern suggests stress-linked strain rather than a single isolated symptom.</h2>
+						<p class="story-copy" data-i18n="storyCopy">The system is reading the symptom story through sleep quality, emotional load, lifestyle habits, and trigger timing to show why the pattern matters before it becomes persistent.</p>
+						<ul class="insight-list" aria-label="Key insights" data-i18n-aria="insightListAria">
+							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight1">The strongest signal is daytime stress pressure that can amplify physical symptoms.</p></li>
+							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight2">Recovery looks possible, but it depends on better sleep consistency and lower evening stimulation.</p></li>
+							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight3">If symptoms intensify after work, the pattern is more likely lifestyle- and trigger-driven than structural.</p></li>
+						</ul>
+					</section>
+
+					<section class="story-card">
+						<p class="story-kicker" data-i18n="confidenceKicker">Pattern Confidence</p>
+						<h2 class="story-title" id="confidenceValue">78%</h2>
+						<p class="story-copy" data-i18n="confidenceCopy">Confidence increases when symptoms, sleep, stress, and trigger timing point in the same direction.</p>
+						<div class="signal-bar" aria-hidden="true"><div class="signal-fill" id="confidenceBar" style="width: 78%"></div></div>
+						<p class="story-copy" data-i18n="confidenceNote">This is not a diagnosis. It is a preventive signal that shows where behavioral pressure may be building.</p>
+					</section>
+				</div>
+
+				<div class="kpi-grid">
+					<article class="kpi-card">
+						<div class="ring" id="stressRing" data-value="74" data-color="#ffcb84">
+							<svg viewBox="0 0 92 92" aria-hidden="true">
+								<circle class="ring-track"></circle>
+								<circle class="ring-fill"></circle>
+							</svg>
+							<span class="ring-value" id="stressValue">74</span>
+						</div>
+						<div>
+							<h2 class="kpi-title" data-i18n="stressTitle">Stress Load Score</h2>
+							<p class="kpi-meta" data-i18n="stressMeta">Elevated stress burden with moderate physiological pressure signals.</p>
+						</div>
+					</article>
+
+					<article class="kpi-card">
+						<div class="ring" id="sleepRing" data-value="62" data-color="#7ea6ff">
+							<svg viewBox="0 0 92 92" aria-hidden="true">
+								<circle class="ring-track"></circle>
+								<circle class="ring-fill"></circle>
+							</svg>
+							<span class="ring-value" id="sleepValue">62</span>
+						</div>
+						<div>
+							<h2 class="kpi-title" data-i18n="sleepTitle">Sleep Quality Score</h2>
+							<p class="kpi-meta" data-i18n="sleepMeta">Sleep continuity suggests room for consistency and bedtime recovery habits.</p>
+						</div>
+					</article>
+
+					<article class="kpi-card">
+						<div class="ring" id="recoveryRing" data-value="68" data-color="#67e7bb">
+							<svg viewBox="0 0 92 92" aria-hidden="true">
+								<circle class="ring-track"></circle>
+								<circle class="ring-fill"></circle>
+							</svg>
+							<span class="ring-value" id="recoveryValue">68</span>
+						</div>
+						<div>
+							<h2 class="kpi-title" data-i18n="recoveryTitle">Mental Recovery Score</h2>
+							<p class="kpi-meta" data-i18n="recoveryMeta">Recovery trajectory is stable, with potential gains from decompression routines.</p>
+						</div>
+					</article>
+
+					<article class="kpi-card">
+						<div class="ring" id="burnoutRing" data-value="56" data-color="#ff8f9e">
+							<svg viewBox="0 0 92 92" aria-hidden="true">
+								<circle class="ring-track"></circle>
+								<circle class="ring-fill"></circle>
+							</svg>
+							<span class="ring-value" id="burnoutValue">56</span>
+						</div>
+						<div>
+							<h2 class="kpi-title" data-i18n="burnoutTitle">Burnout Risk</h2>
+							<p class="kpi-meta" data-i18n="burnoutMeta">Intermediate risk pattern detected based on stress, sleep, and activity profile.</p>
+							<span class="risk-badge" id="burnoutBadge" data-i18n="monitor">Monitor Weekly</span>
+						</div>
+					</article>
+				</div>
+
+				<div class="layer-grid" aria-label="Layer breakdown" data-i18n-aria="layerGridAria">
+					<article class="layer-card">
+						<span class="layer-tag" data-i18n="layer1Tag">Layer 1</span>
+						<p class="layer-score" id="layer1Score">82</p>
+						<p class="layer-label" data-i18n="layer1Label">Behavioral indicators</p>
+						<p class="layer-copy" data-i18n="layer1Copy">Sleep regularity and daily stress are the main drivers of the current signal.</p>
+						<div class="signal-bar"><div class="signal-fill" id="layer1Bar" style="width: 82%"></div></div>
+					</article>
+
+					<article class="layer-card">
+						<span class="layer-tag" data-i18n="layer2Tag">Layer 2</span>
+						<p class="layer-score" id="layer2Score">67</p>
+						<p class="layer-label" data-i18n="layer2Label">Psychosomatic biomarkers</p>
+						<p class="layer-copy" data-i18n="layer2Copy">Tension-related symptoms look meaningful, but not dominant on their own.</p>
+						<div class="signal-bar"><div class="signal-fill" id="layer2Bar" style="width: 67%"></div></div>
+					</article>
+
+					<article class="layer-card">
+						<span class="layer-tag" data-i18n="layer3Tag">Layer 3</span>
+						<p class="layer-score" id="layer3Score">54</p>
+						<p class="layer-label" data-i18n="layer3Label">Lifestyle biomarkers</p>
+						<p class="layer-copy" data-i18n="layer3Copy">Movement and stimulation habits are moderate, leaving room for recovery support.</p>
+						<div class="signal-bar"><div class="signal-fill" id="layer3Bar" style="width: 54%"></div></div>
+					</article>
+
+					<article class="layer-card">
+						<span class="layer-tag" data-i18n="layer4Tag">Layer 4</span>
+						<p class="layer-score" id="layer4Score">71</p>
+						<p class="layer-label" data-i18n="layer4Label">Temporal & trigger patterns</p>
+						<p class="layer-copy" data-i18n="layer4Copy">The timing of symptoms suggests pressure clusters around work and evening recovery.</p>
+						<div class="signal-bar"><div class="signal-fill" id="layer4Bar" style="width: 71%"></div></div>
+					</article>
+				</div>
+
+				<div class="meta-grid">
+					<section class="meta-card">
+						<p class="meta-label" data-i18n="finalStressLabel">Stress Load</p>
+						<p class="meta-value" id="finalStressValue">74/100</p>
+						<p class="meta-copy" data-i18n="finalStressCopy">High enough to explain amplified symptoms and reduced tolerance.</p>
+					</section>
+					<section class="meta-card">
+						<p class="meta-label" data-i18n="finalSleepLabel">Sleep Quality</p>
+						<p class="meta-value" id="finalSleepValue">62/100</p>
+						<p class="meta-copy" data-i18n="finalSleepCopy">Useful for recovery, but not yet stable enough to buffer stress fully.</p>
+					</section>
+					<section class="meta-card">
+						<p class="meta-label" data-i18n="finalRecoveryLabel">Mental Recovery</p>
+						<p class="meta-value" id="finalRecoveryValue">68/100</p>
+						<p class="meta-copy" data-i18n="finalRecoveryCopy">Recovery is present, but the pattern would benefit from better decompression.</p>
+					</section>
+				</div>
+			</section>
+
+			<aside class="recommendations" aria-label="Recommendations" data-i18n-aria="recommendationsAria">
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="intakeSnapshot">Intake Snapshot</p>
+					<h3 class="rec-heading" data-i18n="intakeHeading">Reported Symptoms</h3>
+					<p class="rec-copy" id="symptomSummary" data-i18n="intakeFallback">No symptom text was provided from the intake page.</p>
+					<span class="rec-chip" data-i18n="intakeChip">Context Signal</span>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
+					<h3 class="rec-heading" data-i18n="rec1Heading">Reduce evening stimulation</h3>
+					<p class="rec-copy" data-i18n="rec1Copy">Limit caffeine after 2:00 PM and adopt a 45-minute wind-down routine before sleep.</p>
+					<span class="rec-chip" data-i18n="rec1Chip">Sleep Recovery</span>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
+					<h3 class="rec-heading" data-i18n="rec2Heading">Schedule stress offloading</h3>
+					<p class="rec-copy" data-i18n="rec2Copy">Add two 10-minute breathing or walking breaks during high-demand periods each day.</p>
+					<span class="rec-chip" data-i18n="rec2Chip">Stress Regulation</span>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
+					<h3 class="rec-heading" data-i18n="rec3Heading">Reinforce active recovery</h3>
+					<p class="rec-copy" data-i18n="rec3Copy">Target 4 light activity sessions weekly to support mood stabilization and cognitive reset.</p>
+					<span class="rec-chip" data-i18n="rec3Chip">Behavioral Activation</span>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="nextStep">Next Step</p>
+					<h3 class="rec-heading" data-i18n="nextHeading">Clinical follow-up cadence</h3>
+					<p class="rec-copy" data-i18n="nextCopy">Review these indicators in 7 days to identify trend direction and intervention response.</p>
+					<div class="actions">
+						<a class="btn btn-primary" href="01-symptom-intake.html" data-i18n="startNew">Start New Intake</a>
+						<a class="btn btn-ghost" href="02-assessment.html" data-i18n="updateAssessment">Update Assessment</a>
+						<a class="btn btn-ghost" href="04-clinician-dashboard.html" data-i18n="openClinician">Open Clinician Dashboard</a>
+						<button class="btn btn-ghost" type="button" id="exportPdfBtn" data-i18n="exportPdf">Export PDF</button>
+					</div>
+				</section>
+			</aside>
+		</section>
+	</main>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script>
+		const FULL_CIRCLE = 226.2;
+		const rings = document.querySelectorAll(".ring");
+		const langButtons = document.querySelectorAll(".lang-btn");
+		const symptomSummary = document.getElementById("symptomSummary");
+		const burnoutBadge = document.getElementById("burnoutBadge");
+		const exportPdfBtn = document.getElementById("exportPdfBtn");
+		const ringValueEls = {
+			stress: document.getElementById("stressValue"),
+			sleep: document.getElementById("sleepValue"),
+			recovery: document.getElementById("recoveryValue"),
+			burnout: document.getElementById("burnoutValue")
+		};
+
+		let computedScores = {
+			stress: 74,
+			sleep: 62,
+			recovery: 68,
+			burnout: 56
+		};
+
+		let layerScores = {
+			behavioral: 82,
+			psychosomatic: 67,
+			lifestyle: 54,
+			temporal: 71,
+			confidence: 78
+		};
+
+		let symptomText = "";
+
+		const translations = {
+			en: {
+				documentTitle: "Behavioral Biomarkers Dashboard",
+				brandTitle: "Behavioral Biomarkers Dashboard",
+				brandSubtitle: "Clinical Results Overview",
+				snapshot: "Clinician-Ready Snapshot",
+				overview: "Outcome Overview",
+				profileTitle: "Your behavioral health signal profile",
+				profileLead: "Scores below summarize current behavioral biomarkers and recovery indicators. Use them as guidance for triage planning and focused lifestyle interventions.",
+				storyKicker: "Clinical Interpretation",
+				storyTitle: "The pattern suggests stress-linked strain rather than a single isolated symptom.",
+				storyCopy: "The system is reading the symptom story through sleep quality, emotional load, lifestyle habits, and trigger timing to show why the pattern matters before it becomes persistent.",
+				insightListAria: "Key insights",
+				insight1: "The strongest signal is daytime stress pressure that can amplify physical symptoms.",
+				insight2: "Recovery looks possible, but it depends on better sleep consistency and lower evening stimulation.",
+				insight3: "If symptoms intensify after work, the pattern is more likely lifestyle- and trigger-driven than structural.",
+				confidenceKicker: "Pattern Confidence",
+				confidenceCopy: "Confidence increases when symptoms, sleep, stress, and trigger timing point in the same direction.",
+				confidenceNote: "This is not a diagnosis. It is a preventive signal that shows where behavioral pressure may be building.",
+				layerGridAria: "Layer breakdown",
+				layer1Tag: "Layer 1",
+				layer1Label: "Behavioral indicators",
+				layer1Copy: "Sleep regularity and daily stress are the main drivers of the current signal.",
+				layer2Tag: "Layer 2",
+				layer2Label: "Psychosomatic biomarkers",
+				layer2Copy: "Tension-related symptoms look meaningful, but not dominant on their own.",
+				layer3Tag: "Layer 3",
+				layer3Label: "Lifestyle biomarkers",
+				layer3Copy: "Movement and stimulation habits are moderate, leaving room for recovery support.",
+				layer4Tag: "Layer 4",
+				layer4Label: "Temporal & trigger patterns",
+				layer4Copy: "The timing of symptoms suggests pressure clusters around work and evening recovery.",
+				finalStressLabel: "Stress Load",
+				finalStressCopy: "High enough to explain amplified symptoms and reduced tolerance.",
+				finalSleepLabel: "Sleep Quality",
+				finalSleepCopy: "Useful for recovery, but not yet stable enough to buffer stress fully.",
+				finalRecoveryLabel: "Mental Recovery",
+				finalRecoveryCopy: "Recovery is present, but the pattern would benefit from better decompression.",
+				stressTitle: "Stress Load Score",
+				stressMeta: "Elevated stress burden with moderate physiological pressure signals.",
+				sleepTitle: "Sleep Quality Score",
+				sleepMeta: "Sleep continuity suggests room for consistency and bedtime recovery habits.",
+				recoveryTitle: "Mental Recovery Score",
+				recoveryMeta: "Recovery trajectory is stable, with potential gains from decompression routines.",
+				burnoutTitle: "Burnout Risk",
+				burnoutMeta: "Intermediate risk pattern detected based on stress, sleep, and activity profile.",
+				monitor: "Monitor Weekly",
+				recommendationsAria: "Recommendations",
+				intakeSnapshot: "Intake Snapshot",
+				intakeHeading: "Reported Symptoms",
+				intakeFallback: "No symptom text was provided from the intake page.",
+				intakeChip: "Context Signal",
+				recommendation: "Recommendation",
+				rec1Heading: "Reduce evening stimulation",
+				rec1Copy: "Limit caffeine after 2:00 PM and adopt a 45-minute wind-down routine before sleep.",
+				rec1Chip: "Sleep Recovery",
+				rec2Heading: "Schedule stress offloading",
+				rec2Copy: "Add two 10-minute breathing or walking breaks during high-demand periods each day.",
+				rec2Chip: "Stress Regulation",
+				rec3Heading: "Reinforce active recovery",
+				rec3Copy: "Target 4 light activity sessions weekly to support mood stabilization and cognitive reset.",
+				rec3Chip: "Behavioral Activation",
+				nextStep: "Next Step",
+				nextHeading: "Clinical follow-up cadence",
+				nextCopy: "Review these indicators in 7 days to identify trend direction and intervention response.",
+				startNew: "Start New Intake",
+				updateAssessment: "Update Assessment",
+				openClinician: "Open Clinician Dashboard",
+				exportPdf: "Export PDF",
+				riskLow: "Low Risk",
+				riskModerate: "Monitor Weekly",
+				riskHigh: "High Priority"
+			},
+			ar: {
+				documentTitle: "لوحة المؤشرات الحيوية السلوكية",
+				brandTitle: "لوحة المؤشرات الحيوية السلوكية",
+				brandSubtitle: "نظرة عامة على النتائج السريرية",
+				snapshot: "ملخص جاهز للطبيب",
+				overview: "ملخص النتائج",
+				profileTitle: "ملف إشارات الصحة السلوكية الخاص بك",
+				profileLead: "الدرجات أدناه تلخّص المؤشرات الحيوية السلوكية الحالية ومؤشرات التعافي. استخدمها كإرشاد لتخطيط الفرز والتدخلات السلوكية المركزة.",
+				storyKicker: "التفسير السريري",
+				storyTitle: "النمط يشير إلى ضغط مرتبط بالتوتر أكثر من كونه عرضاً منفرداً.",
+				storyCopy: "يقوم النظام بقراءة قصة الأعراض عبر النوم، والحمل النفسي، وعادات نمط الحياة، وتوقيت المحفزات ليُظهر لماذا يهم هذا النمط قبل أن يصبح مستمراً.",
+				insightListAria: "أهم الإشارات",
+				insight1: "أقوى إشارة هي ضغط التوتر خلال اليوم، وقد يزيد من شدة الأعراض الجسدية.",
+				insight2: "التعافي ممكن، لكنه يحتاج إلى انتظام أفضل في النوم وتقليل التنبيه المسائي.",
+				insight3: "إذا كانت الأعراض تتفاقم بعد العمل، فالنمط أقرب إلى نمط مرتبط بنمط الحياة والمحفزات وليس سبباً بنيوياً منفرداً.",
+				confidenceKicker: "ثقة النمط",
+				confidenceCopy: "ترتفع الثقة عندما تشير الأعراض والنوم والتوتر وتوقيت المحفزات إلى الاتجاه نفسه.",
+				confidenceNote: "هذا ليس تشخيصاً. إنه إشارة وقائية توضّح أين يتراكم الضغط السلوكي.",
+				layerGridAria: "تفصيل الطبقات",
+				layer1Tag: "الطبقة 1",
+				layer1Label: "المؤشرات السلوكية",
+				layer1Copy: "انتظام النوم وضغط التوتر اليومي هما المحركان الرئيسيان للإشارة الحالية.",
+				layer2Tag: "الطبقة 2",
+				layer2Label: "المؤشرات النفسية-الجسدية",
+				layer2Copy: "أعراض الشد ذات الصلة بالتوتر مهمة، لكنها ليست العامل المسيطر وحدها.",
+				layer3Tag: "الطبقة 3",
+				layer3Label: "مؤشرات نمط الحياة",
+				layer3Copy: "النشاط والتنبيه اليومي متوسطان، ما يترك مساحة لدعم التعافي.",
+				layer4Tag: "الطبقة 4",
+				layer4Label: "الزمن وأنماط المحفزات",
+				layer4Copy: "توقيت الأعراض يوحي بتجمع الضغط حول العمل وفترات الاستشفاء المسائية.",
+				finalStressLabel: "عبء التوتر",
+				finalStressCopy: "مرتفع بما يكفي لتفسير تضخم الأعراض وانخفاض التحمل.",
+				finalSleepLabel: "جودة النوم",
+				finalSleepCopy: "مفيد للتعافي، لكنه لم يصل بعد إلى مستوى يوازن التوتر بالكامل.",
+				finalRecoveryLabel: "التعافي الذهني",
+				finalRecoveryCopy: "يوجد تعافٍ، لكن النمط يحتاج إلى تفريغ ضغط أفضل.",
+				stressTitle: "درجة عبء التوتر",
+				stressMeta: "عبء توتر مرتفع مع إشارات ضغط فسيولوجي متوسطة.",
+				sleepTitle: "درجة جودة النوم",
+				sleepMeta: "استمرارية النوم تشير إلى حاجة لمزيد من الانتظام وعادات التعافي قبل النوم.",
+				recoveryTitle: "درجة التعافي الذهني",
+				recoveryMeta: "مسار التعافي مستقر مع إمكانية التحسن عبر روتين تفريغ الضغط.",
+				burnoutTitle: "خطر الاحتراق النفسي",
+				burnoutMeta: "تم اكتشاف نمط خطر متوسط بالاعتماد على التوتر والنوم والنشاط.",
+				monitor: "راقب أسبوعيًا",
+				recommendationsAria: "التوصيات",
+				intakeSnapshot: "ملخص الإدخال",
+				intakeHeading: "الأعراض المبلّغ عنها",
+				intakeFallback: "لم يتم تمرير نص الأعراض من صفحة الإدخال.",
+				intakeChip: "إشارة سياقية",
+				recommendation: "توصية",
+				rec1Heading: "تقليل التنبيه المسائي",
+				rec1Copy: "قلل الكافيين بعد الساعة 2 ظهرًا واعتمد روتين تهدئة لمدة 45 دقيقة قبل النوم.",
+				rec1Chip: "تعافي النوم",
+				rec2Heading: "جدولة تفريغ التوتر",
+				rec2Copy: "أضف فترتي راحة يوميًا لمدة 10 دقائق للتنفس أو المشي خلال فترات الضغط العالية.",
+				rec2Chip: "تنظيم التوتر",
+				rec3Heading: "تعزيز التعافي النشط",
+				rec3Copy: "استهدف 4 جلسات نشاط خفيف أسبوعيًا لدعم استقرار المزاج وإعادة التوازن الذهني.",
+				rec3Chip: "التنشيط السلوكي",
+				nextStep: "الخطوة التالية",
+				nextHeading: "وتيرة المتابعة السريرية",
+				nextCopy: "راجع هذه المؤشرات خلال 7 أيام لتحديد اتجاه التحسن والاستجابة للتدخل.",
+				startNew: "بدء إدخال جديد",
+				updateAssessment: "تحديث التقييم",
+				openClinician: "فتح لوحة الأخصائي",
+				exportPdf: "تصدير PDF",
+				riskLow: "خطر منخفض",
+				riskModerate: "راقب أسبوعيًا",
+				riskHigh: "أولوية عالية"
+			}
+		};
+
+		function clamp(value, min, max) {
+			return Math.max(min, Math.min(max, value));
+		}
+
+		function getScoreFromQuery(params, key, fallback) {
+			const parsed = Number(params.get(key));
+			if (Number.isNaN(parsed)) {
+				return fallback;
+			}
+			return clamp(parsed, 0, 10);
+		}
+
+		function buildLocalScores({ sleep, stress, exercise, caffeine }) {
+			return {
+				stress: Math.round((stress * 0.6 + caffeine * 0.25 + (10 - sleep) * 0.15) * 10),
+				sleep: Math.round((sleep * 0.7 + (10 - caffeine) * 0.15 + (10 - stress) * 0.15) * 10),
+				recovery: Math.round((sleep * 0.4 + exercise * 0.4 + (10 - stress) * 0.2) * 10),
+				burnout: Math.round((stress * 0.5 + caffeine * 0.2 + (10 - sleep) * 0.2 + (10 - exercise) * 0.1) * 10)
+			};
+		}
+
+		function buildLocalLayers({ sleep, stress, exercise, caffeine }) {
+			const behavioral = Math.round(((stress * 0.55) + ((10 - sleep) * 0.3) + ((10 - exercise) * 0.15)) * 10);
+			const psychosomatic = Math.round(((stress * 0.5) + (caffeine * 0.2) + ((10 - sleep) * 0.2) + (exercise * 0.1)) * 10);
+			const lifestyle = Math.round((((10 - exercise) * 0.35) + ((10 - caffeine) * 0.25) + ((10 - sleep) * 0.25) + (stress * 0.15)) * 10);
+			const temporal = Math.round(((stress * 0.45) + ((10 - sleep) * 0.25) + (caffeine * 0.15) + ((10 - exercise) * 0.15)) * 10);
+			const confidence = Math.round((behavioral + psychosomatic + lifestyle + temporal) / 4);
+
+			return {
+				behavioral: clamp(behavioral, 0, 100),
+				psychosomatic: clamp(psychosomatic, 0, 100),
+				lifestyle: clamp(lifestyle, 0, 100),
+				temporal: clamp(temporal, 0, 100),
+				confidence: clamp(confidence, 0, 100)
+			};
+		}
+
+		function applyRing(ringId, value) {
+			const ring = document.getElementById(ringId);
+			const color = ring.dataset.color || "#4cd7da";
+			const fill = ring.querySelector(".ring-fill");
+			const clamped = clamp(value, 0, 100);
+			const offset = FULL_CIRCLE - (clamped / 100) * FULL_CIRCLE;
+
+			fill.style.stroke = color;
+			fill.style.strokeDashoffset = String(offset);
+		}
+
+		function currentLanguage() {
+			return document.documentElement.lang === "ar" ? "ar" : "en";
+		}
+
+		function updateDynamicContent() {
+			ringValueEls.stress.textContent = String(computedScores.stress);
+			ringValueEls.sleep.textContent = String(computedScores.sleep);
+			ringValueEls.recovery.textContent = String(computedScores.recovery);
+			ringValueEls.burnout.textContent = String(computedScores.burnout);
+			document.getElementById("finalStressValue").textContent = `${computedScores.stress}/100`;
+			document.getElementById("finalSleepValue").textContent = `${computedScores.sleep}/100`;
+			document.getElementById("finalRecoveryValue").textContent = `${computedScores.recovery}/100`;
+			document.getElementById("confidenceValue").textContent = `${layerScores.confidence}%`;
+			document.getElementById("confidenceBar").style.width = `${layerScores.confidence}%`;
+			document.getElementById("layer1Score").textContent = String(layerScores.behavioral);
+			document.getElementById("layer2Score").textContent = String(layerScores.psychosomatic);
+			document.getElementById("layer3Score").textContent = String(layerScores.lifestyle);
+			document.getElementById("layer4Score").textContent = String(layerScores.temporal);
+			document.getElementById("layer1Bar").style.width = `${layerScores.behavioral}%`;
+			document.getElementById("layer2Bar").style.width = `${layerScores.psychosomatic}%`;
+			document.getElementById("layer3Bar").style.width = `${layerScores.lifestyle}%`;
+			document.getElementById("layer4Bar").style.width = `${layerScores.temporal}%`;
+
+			applyRing("stressRing", computedScores.stress);
+			applyRing("sleepRing", computedScores.sleep);
+			applyRing("recoveryRing", computedScores.recovery);
+			applyRing("burnoutRing", computedScores.burnout);
+
+			const lang = currentLanguage();
+			if (!symptomText) {
+				symptomSummary.textContent = translations[lang].intakeFallback;
+			} else {
+				const condensed = symptomText.replace(/\s+/g, " ").trim();
+				symptomSummary.textContent = condensed.length > 260 ? `${condensed.slice(0, 260)}...` : condensed;
+			}
+
+			if (computedScores.burnout >= 70) {
+				burnoutBadge.textContent = translations[lang].riskHigh;
+			} else if (computedScores.burnout >= 40) {
+				burnoutBadge.textContent = translations[lang].riskModerate;
+			} else {
+				burnoutBadge.textContent = translations[lang].riskLow;
+			}
+		}
+
+		function setLanguage(lang) {
+			const selectedLang = lang === "ar" ? "ar" : "en";
+			const map = translations[selectedLang];
+			document.documentElement.lang = selectedLang;
+			document.documentElement.dir = selectedLang === "ar" ? "rtl" : "ltr";
+			document.title = map.documentTitle;
+
+			document.querySelectorAll("[data-i18n]").forEach((el) => {
+				const key = el.getAttribute("data-i18n");
+				if (map[key]) {
+					el.textContent = map[key];
+				}
+			});
+
+			document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+				const key = el.getAttribute("data-i18n-aria");
+				if (map[key]) {
+					el.setAttribute("aria-label", map[key]);
+				}
+			});
+
+			langButtons.forEach((btn) => {
+				btn.setAttribute("aria-pressed", String(btn.dataset.lang === selectedLang));
+			});
+
+			localStorage.setItem("bbel-lang", selectedLang);
+			updateDynamicContent();
+		}
+
+		async function fetchScoresFromApi(payload) {
+			try {
+				const response = await fetch("/api/assess", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(payload)
+				});
+
+				if (!response.ok) {
+					return;
+				}
+
+				const data = await response.json();
+				computedScores = {
+					stress: clamp(Number(data?.metrics?.stressLoad) || computedScores.stress, 0, 100),
+					sleep: clamp(Number(data?.metrics?.sleepQuality) || computedScores.sleep, 0, 100),
+					recovery: clamp(Number(data?.metrics?.mentalRecovery) || computedScores.recovery, 0, 100),
+					burnout: clamp(Number(data?.metrics?.burnoutRisk) || computedScores.burnout, 0, 100)
+				};
+				layerScores = {
+					behavioral: clamp(Number(data?.metrics?.behavioralIndicators) || layerScores.behavioral, 0, 100),
+					psychosomatic: clamp(Number(data?.metrics?.psychosomaticBiomarkers) || layerScores.psychosomatic, 0, 100),
+					lifestyle: clamp(Number(data?.metrics?.lifestyleBiomarkers) || layerScores.lifestyle, 0, 100),
+					temporal: clamp(Number(data?.metrics?.temporalTriggerPatterns) || layerScores.temporal, 0, 100),
+					confidence: clamp(Number(data?.metrics?.patternConfidence) || layerScores.confidence, 0, 100)
+				};
+
+				updateDynamicContent();
+			} catch {
+				// Keep local scores when API is unavailable.
+			}
+		}
+
+		function exportPdfReport() {
+			const { jsPDF } = window.jspdf || {};
+			if (!jsPDF) {
+				return;
+			}
+
+			const lang = currentLanguage();
+			const doc = new jsPDF();
+			const title = lang === "ar" ? "تقرير المؤشرات الحيوية السلوكية" : "Behavioral Biomarkers Report";
+			const symptomLabel = lang === "ar" ? "الأعراض:" : "Symptoms:";
+			const stressLabel = lang === "ar" ? "درجة عبء التوتر:" : "Stress Load Score:";
+			const sleepLabel = lang === "ar" ? "درجة جودة النوم:" : "Sleep Quality Score:";
+			const recoveryLabel = lang === "ar" ? "درجة التعافي الذهني:" : "Mental Recovery Score:";
+			const burnoutLabel = lang === "ar" ? "خطر الاحتراق:" : "Burnout Risk:";
+			const timestampLabel = lang === "ar" ? "تاريخ الإنشاء:" : "Generated At:";
+			const safeSymptoms = symptomText ? symptomText.replace(/\s+/g, " ").trim() : (lang === "ar" ? "لا يوجد" : "N/A");
+
+			doc.setFontSize(16);
+			doc.text(title, 14, 18);
+			doc.setFontSize(11);
+			doc.text(`${timestampLabel} ${new Date().toLocaleString()}`, 14, 28);
+			doc.text(`${symptomLabel} ${safeSymptoms}`, 14, 38, { maxWidth: 180 });
+			doc.text(`${stressLabel} ${computedScores.stress}/100`, 14, 60);
+			doc.text(`${sleepLabel} ${computedScores.sleep}/100`, 14, 68);
+			doc.text(`${recoveryLabel} ${computedScores.recovery}/100`, 14, 76);
+			doc.text(`${burnoutLabel} ${computedScores.burnout}/100`, 14, 84);
+
+			const filename = lang === "ar" ? "mental-health-report.pdf" : "behavioral-biomarkers-report.pdf";
+			const pdfBlob = doc.output("blob");
+			const objectUrl = URL.createObjectURL(pdfBlob);
+			const link = document.createElement("a");
+			link.href = objectUrl;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+		}
+
+		const queryParams = new URLSearchParams(window.location.search);
+		const sleepInput = getScoreFromQuery(queryParams, "sleep", 6);
+		const stressInput = getScoreFromQuery(queryParams, "stress", 7);
+		const exerciseInput = getScoreFromQuery(queryParams, "exercise", 4);
+		const caffeineInput = getScoreFromQuery(queryParams, "caffeine", 5);
+		symptomText = queryParams.get("symptoms") || "";
+
+		computedScores = buildLocalScores({
+			sleep: sleepInput,
+			stress: stressInput,
+			exercise: exerciseInput,
+			caffeine: caffeineInput
+		});
+		layerScores = buildLocalLayers({
+			sleep: sleepInput,
+			stress: stressInput,
+			exercise: exerciseInput,
+			caffeine: caffeineInput
+		});
+
+		langButtons.forEach((btn) => {
+			btn.addEventListener("click", () => {
+				setLanguage(btn.dataset.lang);
+			});
+		});
+
+		exportPdfBtn.addEventListener("click", exportPdfReport);
+
+		const savedLanguage = localStorage.getItem("bbel-lang");
+		const browserLanguage = navigator.language || "en";
+		const autoLanguage = browserLanguage.toLowerCase().startsWith("ar") ? "ar" : "en";
+		setLanguage(savedLanguage || autoLanguage);
+
+		fetchScoresFromApi({
+			symptoms: symptomText,
+			sleep: sleepInput,
+			stress: stressInput,
+			exercise: exerciseInput,
+			caffeine: caffeineInput,
+			language: document.documentElement.lang
+		});
+	</script>
+</body>
+</html>
