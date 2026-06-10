@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Symptom Intake | Behavioral Biomarkers Enhancement Layer</title>
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+	</style>
+	<script src="https://api.gammal.tech/sdk-web.js"></script>
+	<style>
+		:root {
+			--bg-0: #050913;
+			--bg-1: #0b1423;
+			--surface: rgba(15, 25, 42, 0.8);
+			--line: rgba(142, 173, 214, 0.24);
+			--text: #ecf4ff;
+			--muted: #9fb5d4;
+			--primary: #4ed8da;
+			--primary-2: #2cbcc1;
+			--accent: #7ea4ff;
+			--ok: #66e7ba;
+			--radius-xl: 24px;
+			--radius-lg: 16px;
+			--shadow: 0 34px 80px rgba(0, 0, 0, 0.5);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Manrope", "Segoe UI", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(60rem 40rem at -5% -15%, rgba(78, 216, 218, 0.22), transparent 62%),
+				radial-gradient(45rem 28rem at 105% 0%, rgba(126, 164, 255, 0.2), transparent 56%),
+				linear-gradient(150deg, var(--bg-0) 0%, var(--bg-1) 80%);
+			padding: 26px;
+			display: grid;
+			place-items: center;
+		}
+
+		html[dir="rtl"] body {
+			font-family: "Cairo", "Segoe UI", sans-serif;
+		}
+
+		.layout {
+			width: min(1160px, 100%);
+			border: 1px solid var(--line);
+			border-radius: var(--radius-xl);
+			background: linear-gradient(180deg, rgba(15, 25, 42, 0.88), rgba(8, 14, 24, 0.95));
+			box-shadow: var(--shadow);
+			overflow: hidden;
+			position: relative;
+			isolation: isolate;
+		}
+
+		.layout::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			pointer-events: none;
+			background-image:
+				linear-gradient(rgba(160, 186, 220, 0.05) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(160, 186, 220, 0.05) 1px, transparent 1px);
+			background-size: 38px 38px;
+			mask-image: radial-gradient(circle at 20% 10%, black 4%, transparent 72%);
+		}
+
+		.topbar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 14px;
+			padding: 18px 24px;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.brand-icon {
+			width: 36px;
+			height: 36px;
+			border-radius: 10px;
+			display: grid;
+			place-items: center;
+			background: linear-gradient(145deg, var(--primary), var(--accent));
+			color: #031219;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-weight: 800;
+			box-shadow: 0 8px 20px rgba(78, 216, 218, 0.35);
+		}
+
+		.brand-copy {
+			display: grid;
+			gap: 1px;
+		}
+
+		.brand-title {
+			font-size: 0.95rem;
+			font-weight: 700;
+			letter-spacing: 0.01em;
+		}
+
+		.brand-subtitle {
+			font-size: 0.78rem;
+			color: var(--muted);
+			letter-spacing: 0.01em;
+		}
+
+		.lang-switch {
+			display: inline-flex;
+			gap: 6px;
+			padding: 4px;
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			background: rgba(11, 18, 31, 0.72);
+		}
+
+		.lang-btn {
+			border: 0;
+			padding: 6px 11px;
+			border-radius: 999px;
+			font-size: 0.76rem;
+			font-weight: 800;
+			letter-spacing: 0.03em;
+			color: #c2d6f5;
+			background: transparent;
+			cursor: pointer;
+		}
+
+		.lang-btn[aria-pressed="true"] {
+			color: #04131b;
+			background: linear-gradient(145deg, var(--primary), var(--accent));
+		}
+
+		.session-pill {
+			border: 1px solid rgba(102, 231, 186, 0.35);
+			background: rgba(102, 231, 186, 0.08);
+			color: #bffde5;
+			border-radius: 999px;
+			padding: 7px 12px;
+			font-size: 0.78rem;
+			font-weight: 700;
+			white-space: nowrap;
+		}
+
+		.content {
+			padding: 24px;
+			display: grid;
+			grid-template-columns: 1.35fr 0.95fr;
+			gap: 22px;
+		}
+
+		.panel {
+			border: 1px solid var(--line);
+			border-radius: var(--radius-lg);
+			background: var(--surface);
+			padding: 24px;
+		}
+
+		.eyebrow {
+			margin: 0 0 12px;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			font-weight: 800;
+			font-size: 0.76rem;
+			color: var(--primary);
+		}
+
+		html[dir="rtl"] .eyebrow,
+		html[dir="rtl"] .widget-title {
+			text-transform: none;
+			letter-spacing: normal;
+		}
+
+		h1 {
+			margin: 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: clamp(1.9rem, 2.5vw, 2.85rem);
+			line-height: 1.1;
+			max-width: 19ch;
+			letter-spacing: -0.02em;
+		}
+
+		.lead {
+			margin: 14px 0 0;
+			color: var(--muted);
+			line-height: 1.65;
+			max-width: 62ch;
+			font-size: 0.97rem;
+		}
+
+		.story-grid {
+			margin-top: 16px;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 12px;
+		}
+
+		.story-card {
+			border: 1px solid var(--line);
+			border-radius: 16px;
+			background: rgba(8, 14, 24, 0.78);
+			padding: 14px;
+		}
+
+		.story-kicker {
+			margin: 0;
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+			color: var(--accent);
+		}
+
+		.story-title {
+			margin: 8px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1rem;
+			font-weight: 800;
+			line-height: 1.3;
+		}
+
+		.story-copy {
+			margin: 8px 0 0;
+			color: var(--muted);
+			font-size: 0.85rem;
+			line-height: 1.55;
+		}
+
+		.story-list {
+			margin: 10px 0 0;
+			padding-inline-start: 18px;
+			color: #d8e5f8;
+			font-size: 0.84rem;
+			line-height: 1.55;
+		}
+
+		.micro-note {
+			margin: 10px 0 0;
+			color: #c8dcf5;
+			font-size: 0.85rem;
+			line-height: 1.55;
+			display: inline-flex;
+			gap: 8px;
+			align-items: baseline;
+		}
+
+		.story-copy,
+		.story-list {
+			font-size: 0.84rem;
+		}
+
+		.micro-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: var(--ok);
+			box-shadow: 0 0 10px rgba(102, 231, 186, 0.6);
+			flex: 0 0 auto;
+		}
+
+		.intake-form {
+			margin-top: 20px;
+			display: grid;
+			gap: 12px;
+		}
+
+		.intake-label {
+			display: flex;
+			justify-content: space-between;
+			gap: 10px;
+			align-items: baseline;
+			color: #dbe9fd;
+			font-size: 0.9rem;
+			font-weight: 700;
+		}
+
+		.hint {
+			color: #89a4cc;
+			font-size: 0.78rem;
+			font-weight: 600;
+		}
+
+		textarea {
+			width: 100%;
+			min-height: 240px;
+			resize: vertical;
+			border: 1px solid rgba(142, 173, 214, 0.3);
+			border-radius: 14px;
+			background: rgba(7, 13, 24, 0.84);
+			color: var(--text);
+			padding: 16px;
+			font: inherit;
+			line-height: 1.5;
+			outline: none;
+			transition: border-color 180ms ease, box-shadow 180ms ease;
+		}
+
+		textarea::placeholder {
+			color: #809bc2;
+		}
+
+		textarea:focus {
+			border-color: rgba(78, 216, 218, 0.9);
+			box-shadow: 0 0 0 3px rgba(78, 216, 218, 0.18);
+		}
+
+		.actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 4px;
+		}
+
+		.btn-primary {
+			border: 0;
+			border-radius: 12px;
+			padding: 14px 22px;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 0.92rem;
+			font-weight: 800;
+			letter-spacing: 0.02em;
+			color: #04141e;
+			background: linear-gradient(145deg, var(--primary), var(--primary-2));
+			box-shadow: 0 12px 26px rgba(44, 188, 193, 0.38);
+			cursor: pointer;
+			transition: transform 140ms ease, box-shadow 140ms ease;
+		}
+
+		.btn-primary:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 14px 30px rgba(44, 188, 193, 0.5);
+		}
+
+		.btn-primary:active {
+			transform: translateY(0);
+		}
+
+		.btn-secondary {
+			border: 1px solid rgba(142, 173, 214, 0.32);
+			border-radius: 12px;
+			padding: 13px 18px;
+			font-weight: 700;
+			font-size: 0.86rem;
+			color: #c6daf6;
+			background: rgba(13, 22, 37, 0.75);
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.dashboard {
+			display: grid;
+			gap: 12px;
+			align-content: start;
+		}
+
+		.widget {
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			background: linear-gradient(165deg, rgba(17, 29, 47, 0.9), rgba(8, 14, 24, 0.9));
+			padding: 14px;
+		}
+
+		.widget-title {
+			margin: 0;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-size: 0.72rem;
+			color: #90a8cb;
+			font-weight: 800;
+		}
+
+		.widget-value {
+			margin: 8px 0 6px;
+			font-size: 1.44rem;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-weight: 800;
+			color: #f4f9ff;
+		}
+
+		.widget-copy {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.86rem;
+			line-height: 1.5;
+		}
+
+		.metric-row {
+			margin-top: 10px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: #c4d8f6;
+			font-size: 0.8rem;
+			font-weight: 600;
+		}
+
+		.progress-track {
+			margin-top: 7px;
+			width: 100%;
+			height: 8px;
+			border-radius: 999px;
+			background: rgba(130, 155, 191, 0.2);
+			overflow: hidden;
+		}
+
+		.progress-bar {
+			width: 72%;
+			height: 100%;
+			background: linear-gradient(90deg, var(--primary), var(--accent));
+		}
+
+		.risk-low {
+			color: var(--ok);
+			font-weight: 700;
+		}
+
+		.risk-watch {
+			color: #ffce8a;
+			font-weight: 700;
+		}
+
+		html[dir="rtl"] .topbar,
+		html[dir="rtl"] .brand,
+		html[dir="rtl"] .actions,
+		html[dir="rtl"] .metric-row,
+		html[dir="rtl"] .intake-label {
+			flex-direction: row-reverse;
+		}
+
+		html[dir="rtl"] .lead,
+		html[dir="rtl"] .hint,
+		html[dir="rtl"] .widget-copy,
+		html[dir="rtl"] .widget-title,
+		html[dir="rtl"] .brand-title,
+		html[dir="rtl"] .brand-subtitle,
+		html[dir="rtl"] .session-pill,
+		html[dir="rtl"] h1 {
+			text-align: right;
+		}
+
+		@media (max-width: 980px) {
+			.content {
+				grid-template-columns: 1fr;
+			}
+
+			.dashboard {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+
+		@media (max-width: 680px) {
+			body {
+				padding: 12px;
+			}
+
+			.topbar {
+				padding: 14px 15px;
+			}
+
+			.content {
+				padding: 15px;
+				gap: 14px;
+			}
+
+			.panel {
+				padding: 16px;
+			}
+
+			.session-pill {
+				display: none;
+			}
+
+			.intake-label {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			html[dir="rtl"] .intake-label {
+				align-items: flex-end;
+			}
+
+			textarea {
+				min-height: 200px;
+			}
+
+			.actions {
+				flex-direction: column;
+			}
+
+			.btn-primary,
+			.btn-secondary {
+				width: 100%;
+			}
+
+			.dashboard {
+				grid-template-columns: 1fr;
+			}
+
+			.lang-switch {
+				margin-inline-start: auto;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="layout">
+		<header class="topbar">
+			<div class="brand">
+				<span class="brand-icon">BB</span>
+				<div class="brand-copy">
+					<span class="brand-title" data-i18n="brandTitle">Behavioral Biomarkers Enhancement Layer</span>
+					<span class="brand-subtitle" data-i18n="brandSubtitle">Pre-Assessment Symptom Intake</span>
+				</div>
+			</div>
+			<div class="lang-switch" role="group" aria-label="Language switcher">
+				<button class="lang-btn" id="langEn" type="button" data-lang="en" aria-pressed="false">EN</button>
+				<button class="lang-btn" id="langAr" type="button" data-lang="ar" aria-pressed="false">AR</button>
+			</div>
+			<span class="session-pill" data-i18n="session">Secure Session</span>
+		</header>
+
+		<section class="content">
+			<article class="panel">
+				<p class="eyebrow" data-i18n="entryPoint">Entry Point</p>
+				<h1 data-i18n="heading">Tell us what you are feeling today</h1>
+				<p class="lead" data-i18n="lead">
+					Describe your symptoms clearly before starting the behavioral assessment journey.
+					Your details help personalize clinical questioning, risk pattern analysis,
+					and downstream behavioral biomarker interpretation.
+				</p>
+				<div class="story-grid">
+					<section class="story-card">
+						<p class="story-kicker" data-i18n="whatWeReadKicker">What we read</p>
+						<h2 class="story-title" data-i18n="whatWeReadTitle">Symptoms are treated as a signal map, not a yes/no complaint.</h2>
+						<p class="story-copy" data-i18n="whatWeReadCopy">The system looks for sleep pressure, stress load, fatigue, and trigger timing to estimate where the pattern may be building.</p>
+					</section>
+					<section class="story-card">
+						<p class="story-kicker" data-i18n="whyItMattersKicker">Why it matters</p>
+						<h2 class="story-title" data-i18n="whyItMattersTitle">This is the first step in a preventive path, not a diagnosis form.</h2>
+						<ul class="story-list">
+							<li data-i18n="whyItem1">It helps the next screen ask smarter questions.</li>
+							<li data-i18n="whyItem2">It gives the backend a context signal before scoring.</li>
+							<li data-i18n="whyItem3">It preserves the user’s story in the assessment trail.</li>
+						</ul>
+					</section>
+				</div>
+				<p class="micro-note">
+					<span class="micro-dot" aria-hidden="true"></span>
+					<span data-i18n="microNote">Protected intake stream with privacy-first handling.</span>
+				</p>
+
+				<form class="intake-form" action="02-assessment.html" method="get">
+					<label class="intake-label" for="symptoms">
+						<span data-i18n="symptomLabel">Symptom Description</span>
+						<span class="hint" data-i18n="symptomHint">Include timeline, intensity, and triggers</span>
+					</label>
+
+					<textarea
+						id="symptoms"
+						name="symptoms"
+						required
+					></textarea>
+
+					<div class="actions">
+						<button type="submit" class="btn-primary" data-i18n="startAssessment">Start Behavioral Assessment</button>
+						<a class="btn-secondary" href="03-result.html" data-i18n="viewInsights">View Sample Insights</a>
+						<button type="button" onclick="login()">Login</button>
+						<button onclick="pay()">Pay</button>
+					</div>
+				</form>
+			</article>
+
+			<aside class="dashboard" aria-label="Clinical Dashboard Summary" data-i18n-aria="dashboardAria">
+				<section class="widget">
+					<p class="widget-title" data-i18n="intakeCompleteness">Intake Completeness</p>
+					<p class="widget-value">72%</p>
+					<p class="widget-copy" data-i18n="intakeCompletenessCopy">Estimated quality signal after core symptom details are provided.</p>
+					<div class="metric-row">
+						<span data-i18n="currentStatus">Current Status</span>
+						<span class="risk-watch" data-i18n="inProgress">In Progress</span>
+					</div>
+					<div class="progress-track" aria-hidden="true">
+						<div class="progress-bar"></div>
+					</div>
+				</section>
+
+				<section class="widget">
+					<p class="widget-title" data-i18n="signalReadiness">Behavioral Signal Readiness</p>
+					<p class="widget-value" data-i18n="highValue">High</p>
+					<p class="widget-copy" data-i18n="signalReadinessCopy">Sufficient context for mood, sleep, and cognitive strain pathways.</p>
+					<div class="metric-row">
+						<span data-i18n="triageFlag">Triage Flag</span>
+						<span class="risk-low" data-i18n="standardPriority">Standard Priority</span>
+					</div>
+				</section>
+
+				<section class="widget">
+					<p class="widget-title" data-i18n="assessmentLatency">Assessment Latency</p>
+					<p class="widget-value" data-i18n="latencyValue">&lt; 45 sec</p>
+					<p class="widget-copy" data-i18n="assessmentLatencyCopy">Average time to generate next-stage adaptive behavioral questions.</p>
+				</section>
+			</aside>
+		</section>
+	</main>
+
+	<script>
+		const langButtons = document.querySelectorAll(".lang-btn");
+		const symptomTextarea = document.getElementById("symptoms");
+
+		const translations = {
+			en: {
+				documentTitle: "Symptom Intake | Behavioral Biomarkers Enhancement Layer",
+				brandTitle: "Behavioral Biomarkers Enhancement Layer",
+				brandSubtitle: "Pre-Assessment Symptom Intake",
+				session: "Secure Session",
+				entryPoint: "Entry Point",
+				heading: "Tell us what you are feeling today",
+				lead: "Describe your symptoms clearly before starting the behavioral assessment journey. Your details help personalize clinical questioning, risk pattern analysis, and downstream behavioral biomarker interpretation.",
+				whatWeReadKicker: "What we read",
+				whatWeReadTitle: "Symptoms are treated as a signal map, not a yes/no complaint.",
+				whatWeReadCopy: "The system looks for sleep pressure, stress load, fatigue, and trigger timing to estimate where the pattern may be building.",
+				whyItMattersKicker: "Why it matters",
+				whyItMattersTitle: "This is the first step in a preventive path, not a diagnosis form.",
+				whyItem1: "It helps the next screen ask smarter questions.",
+				whyItem2: "It gives the backend a context signal before scoring.",
+				whyItem3: "It preserves the user’s story in the assessment trail.",
+				microNote: "Protected intake stream with privacy-first handling.",
+				symptomLabel: "Symptom Description",
+				symptomHint: "Include timeline, intensity, and triggers",
+				symptomPlaceholder: "Example: I have had intermittent dizziness for 3 days, poor sleep, and increased anxiety in the evening after work.",
+				startAssessment: "Start Behavioral Assessment",
+				viewInsights: "View Sample Insights",
+				dashboardAria: "Clinical Dashboard Summary",
+				intakeCompleteness: "Intake Completeness",
+				intakeCompletenessCopy: "Estimated quality signal after core symptom details are provided.",
+				currentStatus: "Current Status",
+				inProgress: "In Progress",
+				signalReadiness: "Behavioral Signal Readiness",
+				highValue: "High",
+				signalReadinessCopy: "Sufficient context for mood, sleep, and cognitive strain pathways.",
+				triageFlag: "Triage Flag",
+				standardPriority: "Standard Priority",
+				assessmentLatency: "Assessment Latency",
+				latencyValue: "< 45 sec",
+				assessmentLatencyCopy: "Average time to generate next-stage adaptive behavioral questions."
+			},
+			ar: {
+				documentTitle: "استقبال الأعراض | طبقة تعزيز المؤشرات الحيوية السلوكية",
+				brandTitle: "طبقة تعزيز المؤشرات الحيوية السلوكية",
+				brandSubtitle: "استقبال الأعراض قبل التقييم",
+				session: "جلسة آمنة",
+				entryPoint: "نقطة البداية",
+				heading: "أخبرنا بما تشعر به اليوم",
+				lead: "صف أعراضك بوضوح قبل بدء رحلة التقييم السلوكي. تساعدنا تفاصيلك في تخصيص الأسئلة السريرية وتحليل أنماط المخاطر وتفسير المؤشرات الحيوية السلوكية.",
+				whatWeReadKicker: "ما الذي نقرأه",
+				whatWeReadTitle: "نتعامل مع الأعراض كخريطة إشارات، لا كشكوى بنعم أو لا.",
+				whatWeReadCopy: "يبحث النظام عن ضغط النوم والتوتر والإرهاق وتوقيت المحفزات لتقدير أين قد يتشكل النمط.",
+				whyItMattersKicker: "لماذا هذا مهم",
+				whyItMattersTitle: "هذه هي الخطوة الأولى في مسار وقائي، وليست نموذج تشخيص.",
+				whyItem1: "تساعد الصفحة التالية على طرح أسئلة أذكى.",
+				whyItem2: "تعطي الخادم إشارة سياقية قبل التقييم.",
+				whyItem3: "تحفظ قصة المستخدم داخل مسار التقييم.",
+				microNote: "تدفق استقبال محمي مع معالجة تركز على الخصوصية.",
+				symptomLabel: "وصف الأعراض",
+				symptomHint: "أضف المدة الزمنية والشدة والعوامل المحفزة",
+				symptomPlaceholder: "مثال: أعاني من دوخة متقطعة منذ 3 أيام، ونوم ضعيف، وزيادة في القلق مساءً بعد العمل.",
+				startAssessment: "ابدأ التقييم السلوكي",
+				viewInsights: "عرض نتائج تجريبية",
+				dashboardAria: "ملخص لوحة المتابعة السريرية",
+				intakeCompleteness: "اكتمال بيانات الاستقبال",
+				intakeCompletenessCopy: "إشارة جودة تقديرية بعد إدخال التفاصيل الأساسية للأعراض.",
+				currentStatus: "الحالة الحالية",
+				inProgress: "قيد المعالجة",
+				signalReadiness: "جاهزية الإشارات السلوكية",
+				highValue: "مرتفع",
+				signalReadinessCopy: "سياق كافٍ لمسارات المزاج والنوم والإجهاد المعرفي.",
+				triageFlag: "مؤشر الفرز",
+				standardPriority: "أولوية عادية",
+				assessmentLatency: "زمن بدء التقييم",
+				latencyValue: "< 45 ثانية",
+				assessmentLatencyCopy: "متوسط الوقت لتوليد أسئلة سلوكية تكيفية للمرحلة التالية."
+			}
+		};
+
+		function setLanguage(lang) {
+			const selectedLang = lang === "ar" ? "ar" : "en";
+			const map = translations[selectedLang];
+
+			document.documentElement.lang = selectedLang;
+			document.documentElement.dir = selectedLang === "ar" ? "rtl" : "ltr";
+			document.title = map.documentTitle;
+
+			document.querySelectorAll("[data-i18n]").forEach((el) => {
+				const key = el.getAttribute("data-i18n");
+				if (map[key]) {
+					el.textContent = map[key];
+				}
+			});
+
+			document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+				const key = el.getAttribute("data-i18n-aria");
+				if (map[key]) {
+					el.setAttribute("aria-label", map[key]);
+				}
+			});
+
+			symptomTextarea.setAttribute("placeholder", map.symptomPlaceholder);
+
+			langButtons.forEach((btn) => {
+				btn.setAttribute("aria-pressed", String(btn.dataset.lang === selectedLang));
+			});
+
+			localStorage.setItem("bbel-lang", selectedLang);
+		}
+
+		langButtons.forEach((btn) => {
+			btn.addEventListener("click", () => {
+				setLanguage(btn.dataset.lang);
+			});
+		});
+
+		const savedLanguage = localStorage.getItem("bbel-lang");
+		const browserLanguage = navigator.language || "en";
+		const autoLanguage = browserLanguage.toLowerCase().startsWith("ar") ? "ar" : "en";
+		setLanguage(savedLanguage || autoLanguage);
+
+		
+   async function login() {
+     await GammalTech.login();
+      alert("Logged in");
+			await GammalTech.user.save({ name: "user1" });
+}
+
+  
+    function pay() {
+     window.location.href =
+       "https://api.gammal.tech/sdk/pay/link/?pid=YOUR_PID&amount=10&desc=Plan&currency=USD&callback=https://your-site.com/thanks";
+}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+[
+  {
+    "timestamp": "2026-06-04T08:43:41.193Z",
+    "input": {
+      "symptoms": "I feel stressed after work",
+      "sleep": 4,
+      "stress": 8,
+      "exercise": 3,
+      "caffeine": 7,
+      "language": "en"
+    },
+    "metrics": {
+      "behavioralIndicators": 73,
+      "psychosomaticBiomarkers": 69,
+      "lifestyleBiomarkers": 60,
+      "temporalTriggerPatterns": 63,
+      "stressLoad": 74,
+      "sleepQuality": 36,
+      "mentalRecovery": 32,
+      "emotionalFatigue": 72,
+      "patternConfidence": 66,
+      "burnoutRisk": 73,
+      "burnoutLevel": "high"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T08:34:40.581Z",
+    "input": {
+      "symptoms": "I feel stressed after work",
+      "sleep": 4,
+      "stress": 8,
+      "exercise": 3,
+      "caffeine": 7,
+      "language": "en"
+    },
+    "metrics": {
+      "stressLoad": 75,
+      "sleepQuality": 36,
+      "mentalRecovery": 32,
+      "burnoutRisk": 73,
+      "burnoutLevel": "high"
+    }
+  },
+  {
+    "timestamp": "2026-06-03T07:42:25.884Z",
+    "input": {
+      "symptoms": "Low mood and poor sleep for a week",
+      "sleep": 4,
+      "stress": 8,
+      "exercise": 2,
+      "caffeine": 7,
+      "language": "ar"
+    },
+    "metrics": {
+      "stressLoad": 75,
+      "sleepQuality": 36,
+      "mentalRecovery": 28,
+      "burnoutRisk": 74,
+      "burnoutLevel": "high"
+    }
+  },
+  {
+    "timestamp": "2026-06-03T07:22:54.778Z",
+    "input": {
+      "symptoms": "",
+      "sleep": 9,
+      "stress": 10,
+      "exercise": 0,
+      "caffeine": 4,
+      "language": "ar"
+    },
+    "metrics": {
+      "stressLoad": 72,
+      "sleepQuality": 72,
+      "mentalRecovery": 36,
+      "burnoutRisk": 70,
+      "burnoutLevel": "high"
+    }
+  },
+  {
+    "timestamp": "2026-06-03T07:22:16.745Z",
+    "input": {
+      "symptoms": "انتفاخ وصداع",
+      "sleep": 0,
+      "stress": 9,
+      "exercise": 0,
+      "caffeine": 3,
+      "language": "ar"
+    },
+    "metrics": {
+      "stressLoad": 77,
+      "sleepQuality": 12,
+      "mentalRecovery": 2,
+      "burnoutRisk": 81,
+      "burnoutLevel": "high"
+    }
+  },
+  {
+    "timestamp": "2026-06-03T07:16:57.889Z",
+    "input": {
+      "symptoms": "Low mood and poor sleep for a week",
+      "sleep": 4,
+      "stress": 8,
+      "exercise": 2,
+      "caffeine": 7,
+      "language": "en"
+    },
+    "metrics": {
+      "stressLoad": 75,
+      "sleepQuality": 36,
+      "mentalRecovery": 28,
+      "burnoutRisk": 74,
+      "burnoutLevel": "high"
+    }
+  }
+]
