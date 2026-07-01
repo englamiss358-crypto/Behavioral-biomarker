@@ -4,25 +4,26 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Symptom Intake | Behavioral Biomarkers Enhancement Layer</title>
+	<script src="https://api.gammal.tech/sdk-web.js"></script>
 	<style>
 		@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 	</style>
-	<script src="https://api.gammal.tech/sdk-web.js"></script>
+	
 	<style>
 		:root {
-			--bg-0: #050913;
-			--bg-1: #0b1423;
-			--surface: rgba(15, 25, 42, 0.8);
-			--line: rgba(142, 173, 214, 0.24);
-			--text: #ecf4ff;
-			--muted: #9fb5d4;
+			--bg-0: #223a5f;
+			--bg-1: #3f6292;
+			--surface: rgba(35, 55, 88, 0.72);
+			--line: rgba(180, 205, 236, 0.38);
+			--text: #f4f8ff;
+			--muted: #d2e0f3;
 			--primary: #4ed8da;
 			--primary-2: #2cbcc1;
 			--accent: #7ea4ff;
 			--ok: #66e7ba;
 			--radius-xl: 24px;
 			--radius-lg: 16px;
-			--shadow: 0 34px 80px rgba(0, 0, 0, 0.5);
+			--shadow: 0 30px 70px rgba(21, 39, 69, 0.35);
 		}
 
 		* {
@@ -55,7 +56,7 @@
 			width: min(1160px, 100%);
 			border: 1px solid var(--line);
 			border-radius: var(--radius-xl);
-			background: linear-gradient(180deg, rgba(15, 25, 42, 0.88), rgba(8, 14, 24, 0.95));
+			background: linear-gradient(180deg, rgba(36, 57, 90, 0.86), rgba(49, 76, 115, 0.88));
 			box-shadow: var(--shadow);
 			overflow: hidden;
 			position: relative;
@@ -126,7 +127,7 @@
 			padding: 4px;
 			border: 1px solid var(--line);
 			border-radius: 999px;
-			background: rgba(11, 18, 31, 0.72);
+			background: rgba(35, 55, 88, 0.52);
 		}
 
 		.lang-btn {
@@ -213,7 +214,7 @@
 		.story-card {
 			border: 1px solid var(--line);
 			border-radius: 16px;
-			background: rgba(8, 14, 24, 0.78);
+			background: rgba(41, 65, 100, 0.68);
 			padding: 14px;
 		}
 
@@ -301,7 +302,7 @@
 			resize: vertical;
 			border: 1px solid rgba(142, 173, 214, 0.3);
 			border-radius: 14px;
-			background: rgba(7, 13, 24, 0.84);
+			background: rgba(41, 63, 96, 0.72);
 			color: var(--text);
 			padding: 16px;
 			font: inherit;
@@ -324,6 +325,20 @@
 			flex-wrap: wrap;
 			gap: 10px;
 			margin-top: 4px;
+		}
+
+		.pid-input {
+			max-width: 220px;
+			border: 1px solid rgba(142, 173, 214, 0.32);
+			border-radius: 12px;
+			padding: 12px;
+			background: rgba(43, 67, 103, 0.72);
+			color: #d8e8ff;
+			font: inherit;
+		}
+
+		.pid-input::placeholder {
+			color: #89a4cc;
 		}
 
 		.btn-primary {
@@ -357,7 +372,7 @@
 			font-weight: 700;
 			font-size: 0.86rem;
 			color: #c6daf6;
-			background: rgba(13, 22, 37, 0.75);
+			background: rgba(43, 67, 103, 0.72);
 			text-decoration: none;
 			display: inline-flex;
 			align-items: center;
@@ -373,7 +388,7 @@
 		.widget {
 			border: 1px solid var(--line);
 			border-radius: 14px;
-			background: linear-gradient(165deg, rgba(17, 29, 47, 0.9), rgba(8, 14, 24, 0.9));
+			background: linear-gradient(165deg, rgba(45, 70, 108, 0.84), rgba(62, 93, 136, 0.86));
 			padding: 14px;
 		}
 
@@ -581,8 +596,9 @@
 					<div class="actions">
 						<button type="submit" class="btn-primary" data-i18n="startAssessment">Start Behavioral Assessment</button>
 						<a class="btn-secondary" href="03-result.html" data-i18n="viewInsights">View Sample Insights</a>
-						<button type="button" onclick="login()">Login</button>
-						<button onclick="pay()">Pay</button>
+						<a class="btn-secondary" href="04-clinician-dashboard.html" data-i18n="clinicianLogin">Clinician Login</a>
+						<input type="text" inputmode="numeric" id="paymentPidInput" class="pid-input" data-i18n-placeholder="pidPlaceholder" placeholder="Gammal PID (e.g. 47)" />
+						<button type="button" class="btn-secondary" id="payBtn" data-i18n="payNow">Pay & Subscribe</button>
 					</div>
 				</form>
 			</article>
@@ -623,6 +639,12 @@
 	<script>
 		const langButtons = document.querySelectorAll(".lang-btn");
 		const symptomTextarea = document.getElementById("symptoms");
+		const payBtn = document.getElementById("payBtn");
+		const paymentPidInput = document.getElementById("paymentPidInput");
+		const PAYMENT_PID_STORAGE_KEY = "bbel-gammal-pid";
+		const PAYMENT_DEFAULT_AMOUNT = "10";
+		const PAYMENT_DEFAULT_CURRENCY = "USD";
+		const PAYMENT_DEFAULT_DESC = "Behavioral Biomarkers MVP";
 
 		const translations = {
 			en: {
@@ -647,6 +669,9 @@
 				symptomPlaceholder: "Example: I have had intermittent dizziness for 3 days, poor sleep, and increased anxiety in the evening after work.",
 				startAssessment: "Start Behavioral Assessment",
 				viewInsights: "View Sample Insights",
+				clinicianLogin: "Clinician Login",
+				pidPlaceholder: "Gammal PID (e.g. 47)",
+				payNow: "Pay & Subscribe",
 				dashboardAria: "Clinical Dashboard Summary",
 				intakeCompleteness: "Intake Completeness",
 				intakeCompletenessCopy: "Estimated quality signal after core symptom details are provided.",
@@ -683,6 +708,9 @@
 				symptomPlaceholder: "مثال: أعاني من دوخة متقطعة منذ 3 أيام، ونوم ضعيف، وزيادة في القلق مساءً بعد العمل.",
 				startAssessment: "ابدأ التقييم السلوكي",
 				viewInsights: "عرض نتائج تجريبية",
+				clinicianLogin: "دخول الأخصائي",
+				pidPlaceholder: "رقم مشروع Gammal (مثال: 47)",
+				payNow: "الدفع والاشتراك",
 				dashboardAria: "ملخص لوحة المتابعة السريرية",
 				intakeCompleteness: "اكتمال بيانات الاستقبال",
 				intakeCompletenessCopy: "إشارة جودة تقديرية بعد إدخال التفاصيل الأساسية للأعراض.",
@@ -728,6 +756,10 @@
 			});
 
 			localStorage.setItem("bbel-lang", selectedLang);
+
+			if (!paymentPidInput.value) {
+				paymentPidInput.setAttribute("placeholder", map.pidPlaceholder);
+			}
 		}
 
 		langButtons.forEach((btn) => {
@@ -741,18 +773,59 @@
 		const autoLanguage = browserLanguage.toLowerCase().startsWith("ar") ? "ar" : "en";
 		setLanguage(savedLanguage || autoLanguage);
 
-		
-   async function login() {
-     await GammalTech.login();
-      alert("Logged in");
-			await GammalTech.user.save({ name: "user1" });
-}
+		function language() {
+			return document.documentElement.lang === "ar" ? "ar" : "en";
+		}
 
-  
-    function pay() {
-     window.location.href =
-       "https://api.gammal.tech/sdk/pay/link/?pid=YOUR_PID&amount=10&desc=Plan&currency=USD&callback=https://your-site.com/thanks";
-}
+		function readPidFromQuery() {
+			const pidFromUrl = new URLSearchParams(window.location.search).get("pid");
+			if (/^\d+$/.test(String(pidFromUrl || "").trim())) {
+				localStorage.setItem(PAYMENT_PID_STORAGE_KEY, String(pidFromUrl).trim());
+			}
+		}
+
+		function getSavedPid() {
+			const saved = String(localStorage.getItem(PAYMENT_PID_STORAGE_KEY) || "").trim();
+			return /^\d+$/.test(saved) ? saved : "";
+		}
+
+		function buildPaymentUrl(pid) {
+			const callback = `${window.location.origin}/payment-callback.html`;
+			const params = new URLSearchParams({
+				pid,
+				amount: PAYMENT_DEFAULT_AMOUNT,
+				desc: PAYMENT_DEFAULT_DESC,
+				currency: PAYMENT_DEFAULT_CURRENCY,
+				callback
+			});
+
+			return `https://api.gammal.tech/sdk/pay/link/?${params.toString().replace(/%20/g, "+")}`;
+		}
+
+		payBtn.addEventListener("click", () => {
+			const pidValue = String(paymentPidInput.value || getSavedPid()).trim();
+			if (!/^\d+$/.test(pidValue)) {
+				const invalid = language() === "ar"
+					? "ادخلي Project ID صحيح في خانة Gammal PID (أرقام فقط)."
+					: "Please enter a valid numeric Project ID in the Gammal PID field.";
+				window.alert(invalid);
+				return;
+			}
+
+			localStorage.setItem(PAYMENT_PID_STORAGE_KEY, pidValue);
+
+			const currentLang = language();
+			if (currentLang === "ar") {
+				window.alert("سيتم تحويلك الآن لبوابة الدفع الآمنة لإكمال الاشتراك.");
+			} else {
+				window.alert("You will now be redirected to the secure payment portal.");
+			}
+
+			window.location.href = buildPaymentUrl(pidValue);
+		});
+
+		readPidFromQuery();
+		paymentPidInput.value = getSavedPid();
 
 	</script>
 </body>

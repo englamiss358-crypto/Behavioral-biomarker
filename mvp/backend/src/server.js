@@ -30,6 +30,18 @@ function parseScore(value, fallback) {
   return clamp(parsed, 0, 10);
 }
 
+function parseOptionalScore(value) {
+  if (value === null || value === undefined || String(value).trim() === "") {
+    return null;
+  }
+
+  const parsed = Number(value);
+  if (Number.isNaN(parsed)) {
+    return null;
+  }
+  return clamp(parsed, 0, 10);
+}
+
 function signalFromSymptoms(text) {
   const lengthScore = clamp(Math.round(String(text || "").length / 20), 0, 10);
   return lengthScore;
@@ -103,13 +115,73 @@ async function writeAssessments(items) {
 }
 
 function normalizeRequest(payload) {
+  const detailedInputs = {
+    sleepHours: parseOptionalScore(payload.sleepHours),
+    sleepContinuity: parseOptionalScore(payload.sleepContinuity),
+    sleepLatency: parseOptionalScore(payload.sleepLatency),
+    perceivedStress: parseOptionalScore(payload.perceivedStress),
+    emotionalExhaustion: parseOptionalScore(payload.emotionalExhaustion),
+    concentrationDifficulty: parseOptionalScore(payload.concentrationDifficulty),
+    activityFrequency: parseOptionalScore(payload.activityFrequency),
+    sedentaryHours: parseOptionalScore(payload.sedentaryHours),
+    caffeineIntake: parseOptionalScore(payload.caffeineIntake),
+    hydrationQuality: parseOptionalScore(payload.hydrationQuality),
+    muscleTension: parseOptionalScore(payload.muscleTension),
+    workTriggeredSymptoms: parseOptionalScore(payload.workTriggeredSymptoms)
+  };
+
+  const detailedValues = Object.values(detailedInputs).filter((value) => value !== null);
+  const hasDetailedInputs = detailedValues.length > 0;
+
+  const average = (...values) => {
+    const safe = values.filter((value) => Number.isFinite(value));
+    if (!safe.length) {
+      return null;
+    }
+
+    const sum = safe.reduce((total, value) => total + value, 0);
+    return clamp(Number((sum / safe.length).toFixed(2)), 0, 10);
+  };
+
+  const derivedSleep = average(
+    detailedInputs.sleepHours,
+    detailedInputs.sleepContinuity,
+    detailedInputs.sleepLatency === null ? null : 10 - detailedInputs.sleepLatency
+  );
+
+  const derivedStress = average(
+    detailedInputs.perceivedStress,
+    detailedInputs.emotionalExhaustion,
+    detailedInputs.concentrationDifficulty,
+    detailedInputs.muscleTension,
+    detailedInputs.workTriggeredSymptoms
+  );
+
+  const derivedExercise = average(
+    detailedInputs.activityFrequency,
+    detailedInputs.sedentaryHours === null ? null : 10 - detailedInputs.sedentaryHours
+  );
+
+  const derivedCaffeine = average(detailedInputs.caffeineIntake);
+
+  const sleep = parseScore(payload.sleep, 6);
+  const stress = parseScore(payload.stress, 7);
+  const exercise = parseScore(payload.exercise, 4);
+  const caffeine = parseScore(payload.caffeine, 5);
+
+  const coverage = hasDetailedInputs
+    ? clamp(Math.round((detailedValues.length / Object.keys(detailedInputs).length) * 100), 0, 100)
+    : null;
+
   return {
     symptoms: sanitizeSymptoms(payload.symptoms),
-    sleep: parseScore(payload.sleep, 6),
-    stress: parseScore(payload.stress, 7),
-    exercise: parseScore(payload.exercise, 4),
-    caffeine: parseScore(payload.caffeine, 5),
-    language: String(payload.language || "en").toLowerCase().startsWith("ar") ? "ar" : "en"
+    sleep: derivedSleep === null ? sleep : derivedSleep,
+    stress: derivedStress === null ? stress : derivedStress,
+    exercise: derivedExercise === null ? exercise : derivedExercise,
+    caffeine: derivedCaffeine === null ? caffeine : derivedCaffeine,
+    language: String(payload.language || "en").toLowerCase().startsWith("ar") ? "ar" : "en",
+    detailedInputs,
+    assessmentCoverage: coverage
   };
 }
 
@@ -202,12 +274,35 @@ function authMiddleware(req, res, next) {
     return;
   }
 
-  req.clinician = { username: "public" };
+  const rawAuth = String(req.headers.authorization || "");
+  const bearerToken = rawAuth.startsWith("Bearer ") ? rawAuth.slice(7).trim() : "";
+  const headerToken = String(req.headers["x-session-token"] || "").trim();
+  const token = bearerToken || headerToken;
+
+  if (!token) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const session = getSession(token);
+  if (!session) {
+    res.status(401).json({ error: "Session expired" });
+    return;
+  }
+
+  req.clinician = { username: session.username };
   next();
 }
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "behavioral-biomarkers-mvp" });
+});
+
+app.get("/api/auth/config", (_req, res) => {
+  res.json({
+    demoMode: CLINICIAN_DEMO_MODE,
+    sessionTtlMs: SESSION_TTL_MS
+  });
 });
 
 app.post("/api/auth/login", (req, res) => {
@@ -282,6 +377,7 @@ app.get("/api/stats", authMiddleware, async (req, res) => {
         averageEmotionalFatigue: 0,
         averagePatternConfidence: 0,
         averageBurnoutRisk: 0,
+        averageAssessmentCoverage: 0,
         riskBuckets: {
           low: 0,
           moderate: 0,
@@ -306,6 +402,7 @@ app.get("/api/stats", authMiddleware, async (req, res) => {
         acc.fatigue += Number(metrics.emotionalFatigue) || 0;
         acc.confidence += Number(metrics.patternConfidence) || 0;
         acc.burnout += Number(metrics.burnoutRisk) || 0;
+        acc.coverage += Number(item?.input?.assessmentCoverage) || 0;
 
         if (level === "high") {
           acc.risk.high += 1;
@@ -328,6 +425,7 @@ app.get("/api/stats", authMiddleware, async (req, res) => {
         fatigue: 0,
         confidence: 0,
         burnout: 0,
+        coverage: 0,
         risk: {
           low: 0,
           moderate: 0,
@@ -349,6 +447,7 @@ app.get("/api/stats", authMiddleware, async (req, res) => {
       averageEmotionalFatigue: Math.round(sums.fatigue / count),
       averagePatternConfidence: Math.round(sums.confidence / count),
       averageBurnoutRisk: Math.round(sums.burnout / count),
+      averageAssessmentCoverage: Math.round(sums.coverage / count),
       riskBuckets: sums.risk
     });
   } catch {
@@ -359,7 +458,7 @@ app.get("/api/stats", authMiddleware, async (req, res) => {
 app.use(express.static(UI_DIR));
 
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(UI_DIR, "01-symptom-intake.html"));
+  res.sendFile(path.join(UI_DIR, "index.html"));
 });
 
 app.listen(PORT, () => {

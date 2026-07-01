@@ -8,12 +8,12 @@
 		@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
 
 		:root {
-			--bg-0: #050a13;
-			--bg-1: #0b1422;
-			--surface: rgba(15, 25, 41, 0.84);
-			--line: rgba(139, 172, 216, 0.24);
-			--text: #edf4ff;
-			--muted: #9cb3d3;
+			--bg-0: #223a5f;
+			--bg-1: #3f6292;
+			--surface: rgba(36, 57, 90, 0.75);
+			--line: rgba(180, 205, 236, 0.36);
+			--text: #f4f8ff;
+			--muted: #d0dff2;
 			--primary: #4cd7da;
 			--accent: #7ea6ff;
 			--ok: #67e7bb;
@@ -21,7 +21,7 @@
 			--high: #ff8f9e;
 			--radius-xl: 24px;
 			--radius-lg: 16px;
-			--shadow: 0 36px 84px rgba(0, 0, 0, 0.52);
+			--shadow: 0 30px 74px rgba(23, 40, 69, 0.35);
 		}
 
 		* {
@@ -54,7 +54,7 @@
 			width: min(1160px, 100%);
 			border: 1px solid var(--line);
 			border-radius: var(--radius-xl);
-			background: linear-gradient(180deg, rgba(15, 25, 41, 0.9), rgba(9, 15, 27, 0.95));
+			background: linear-gradient(180deg, rgba(37, 58, 91, 0.86), rgba(53, 80, 120, 0.88));
 			box-shadow: var(--shadow);
 			overflow: hidden;
 			position: relative;
@@ -124,7 +124,7 @@
 			padding: 4px;
 			border: 1px solid var(--line);
 			border-radius: 999px;
-			background: rgba(11, 18, 31, 0.72);
+			background: rgba(35, 55, 88, 0.52);
 		}
 
 		.lang-btn {
@@ -215,10 +215,153 @@
 			gap: 12px;
 		}
 
+		.cdss-strip {
+			margin-top: 18px;
+			display: grid;
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			gap: 10px;
+		}
+
+		.summary-card {
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			background: rgba(41, 64, 99, 0.68);
+			padding: 14px;
+			display: grid;
+			gap: 6px;
+		}
+
+		.summary-label {
+			margin: 0;
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+			color: #8ea7ca;
+		}
+
+		.summary-value {
+			margin: 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.2rem;
+			font-weight: 800;
+			color: #eef6ff;
+		}
+
+		.summary-copy {
+			margin: 0;
+			font-size: 0.82rem;
+			line-height: 1.5;
+			color: var(--muted);
+		}
+
+		.section-card {
+			margin-top: 14px;
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			background: rgba(41, 64, 99, 0.68);
+			padding: 16px;
+		}
+
+		.section-kicker {
+			margin: 0;
+			font-size: 0.74rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+			color: var(--primary);
+		}
+
+		.section-title {
+			margin: 8px 0 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 1.12rem;
+			line-height: 1.3;
+			font-weight: 800;
+		}
+
+		.section-copy {
+			margin: 10px 0 0;
+			color: var(--muted);
+			font-size: 0.92rem;
+			line-height: 1.7;
+		}
+
+		.evidence-list,
+		.guidance-list,
+		.consideration-list {
+			margin: 12px 0 0;
+			padding-inline-start: 18px;
+			color: #dbe8f8;
+			line-height: 1.65;
+		}
+
+		.evidence-list li,
+		.guidance-list li,
+		.consideration-list li {
+			margin: 8px 0;
+		}
+
+		.correlation-grid {
+			margin-top: 12px;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+			gap: 10px;
+		}
+
+		.correlation-card {
+			border: 1px solid rgba(180, 205, 236, 0.26);
+			border-radius: 14px;
+			background: rgba(27, 45, 72, 0.56);
+			padding: 12px;
+		}
+
+		.correlation-chain {
+			margin: 0;
+			font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+			font-size: 0.92rem;
+			font-weight: 800;
+			color: #eef6ff;
+		}
+
+		.correlation-note {
+			margin: 6px 0 0;
+			color: var(--muted);
+			font-size: 0.84rem;
+			line-height: 1.55;
+		}
+
+		.lower-scores {
+			margin-top: 16px;
+			padding-top: 6px;
+			border-top: 1px solid rgba(180, 205, 236, 0.18);
+		}
+
+		.lower-scores-kicker {
+			margin: 0 0 10px;
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-weight: 800;
+			color: #8ea7ca;
+		}
+
+		.cdss-note {
+			margin: 14px 0 0;
+			border: 1px solid rgba(180, 205, 236, 0.28);
+			border-radius: 14px;
+			background: rgba(27, 45, 72, 0.52);
+			padding: 14px;
+		}
+
+		.cdss-note strong {
+			color: #f4f8ff;
+		}
+
 		.story-card {
 			border: 1px solid var(--line);
 			border-radius: 18px;
-			background: rgba(8, 14, 24, 0.76);
+			background: rgba(41, 64, 99, 0.67);
 			padding: 16px;
 		}
 
@@ -356,7 +499,7 @@
 		.meta-card {
 			border: 1px solid var(--line);
 			border-radius: 16px;
-			background: rgba(8, 14, 24, 0.78);
+			background: rgba(41, 64, 99, 0.68);
 			padding: 14px;
 		}
 
@@ -386,7 +529,7 @@
 		.kpi-card {
 			border: 1px solid var(--line);
 			border-radius: 14px;
-			background: rgba(8, 14, 24, 0.78);
+			background: rgba(41, 64, 99, 0.68);
 			padding: 14px;
 			display: grid;
 			grid-template-columns: 92px 1fr;
@@ -544,7 +687,7 @@
 		.btn-ghost {
 			border: 1px solid rgba(139, 172, 216, 0.35);
 			color: #c7daf7;
-			background: rgba(12, 21, 36, 0.75);
+			background: rgba(43, 67, 103, 0.72);
 		}
 
 		html[dir="rtl"] .topbar,
@@ -606,6 +749,10 @@
 				grid-template-columns: 1fr;
 			}
 
+			.cdss-strip {
+				grid-template-columns: 1fr;
+			}
+
 			.recommendations {
 				grid-template-columns: 1fr;
 			}
@@ -647,25 +794,57 @@
 
 		<section class="content">
 			<section class="panel">
-				<p class="eyebrow" data-i18n="overview">Outcome Overview</p>
-				<h1 data-i18n="profileTitle">Your behavioral health signal profile</h1>
-				<p class="lead" data-i18n="profileLead">
-					Scores below summarize current behavioral biomarkers and recovery indicators.
-					Use them as guidance for triage planning and focused lifestyle interventions.
-				</p>
+				<p class="eyebrow" data-i18n="cdssOverview">Clinical Decision Support Report</p>
+				<h1 data-i18n="cdssTitle">Behavioral Biomarkers Clinical Review</h1>
+				<p class="lead" data-i18n="cdssLead">This report does not diagnose disease or mental disorders. It helps the physician judge whether behavioral biomarkers and lifestyle factors may be contributing to the patient's symptoms.</p>
+
+				<div class="cdss-strip" aria-label="Clinical summary" data-i18n-aria="summaryAria">
+					<article class="summary-card">
+						<p class="summary-label" data-i18n="overallIndexLabel">Overall Behavioral Biomarkers Index</p>
+						<p class="summary-value" id="overallIndexValue">78%</p>
+						<p class="summary-copy" id="overallIndexNote" data-i18n="overallIndexNote">Overall burden appears clinically relevant and should be interpreted with the history and examination.</p>
+					</article>
+					<article class="summary-card">
+						<p class="summary-label" data-i18n="burdenLabel">Behavioral Burden</p>
+						<p class="summary-value" id="burdenLabelValue">Moderate</p>
+						<p class="summary-copy" id="burdenLabelNote" data-i18n="burdenNote">The profile shows enough pressure to potentially influence symptom persistence.</p>
+					</article>
+					<article class="summary-card">
+						<p class="summary-label" data-i18n="sleepSummaryLabel">Sleep Quality</p>
+						<p class="summary-value" id="sleepSummaryValue">62/100</p>
+						<p class="summary-copy" data-i18n="sleepSummaryNote">Sleep signals should be reviewed as part of the symptom workup.</p>
+					</article>
+					<article class="summary-card">
+						<p class="summary-label" data-i18n="stressSummaryLabel">Stress Response</p>
+						<p class="summary-value" id="stressSummaryValue">74/100</p>
+						<p class="summary-copy" data-i18n="stressSummaryNote">The stress pattern may be clinically relevant to symptom amplification.</p>
+					</article>
+					<article class="summary-card">
+						<p class="summary-label" data-i18n="recoverySummaryLabel">Recovery Capacity</p>
+						<p class="summary-value" id="recoverySummaryValue">68/100</p>
+						<p class="summary-copy" data-i18n="recoverySummaryNote">Recovery capacity appears present but may be insufficient under current load.</p>
+					</article>
+				</div>
+
+				<section class="section-card">
+					<p class="section-kicker" data-i18n="interpretationKicker">Clinical Interpretation</p>
+					<h2 class="section-title" id="clinicalInterpretation">The behavioral profile suggests that sleep quality, stress exposure, and reduced recovery capacity may contribute to the persistence or severity of the patient's symptoms.</h2>
+					<p class="section-copy" data-i18n="interpretationCopy">These findings should be considered together with clinical examination, medical history, and the timing of symptoms. The report does not diagnose a condition; it highlights behavioral factors that may be clinically relevant.</p>
+				</section>
+
+				<section class="section-card">
+					<p class="section-kicker" data-i18n="evidenceKicker">Evidence Behind the Analysis</p>
+					<h2 class="section-title" data-i18n="evidenceTitle">Why the system reached this conclusion</h2>
+					<ul class="evidence-list" id="evidenceList"></ul>
+				</section>
+
+				<section class="section-card">
+					<p class="section-kicker" data-i18n="correlationsKicker">Behavioral Correlations</p>
+					<h2 class="section-title" data-i18n="correlationsTitle">Possible relationships supported by the responses</h2>
+					<div class="correlation-grid" id="correlationList"></div>
+				</section>
 
 				<div class="story-grid">
-					<section class="story-card">
-						<p class="story-kicker" data-i18n="storyKicker">Clinical Interpretation</p>
-						<h2 class="story-title" data-i18n="storyTitle">The pattern suggests stress-linked strain rather than a single isolated symptom.</h2>
-						<p class="story-copy" data-i18n="storyCopy">The system is reading the symptom story through sleep quality, emotional load, lifestyle habits, and trigger timing to show why the pattern matters before it becomes persistent.</p>
-						<ul class="insight-list" aria-label="Key insights" data-i18n-aria="insightListAria">
-							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight1">The strongest signal is daytime stress pressure that can amplify physical symptoms.</p></li>
-							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight2">Recovery looks possible, but it depends on better sleep consistency and lower evening stimulation.</p></li>
-							<li class="insight-item"><span class="insight-bullet" aria-hidden="true"></span><p class="insight-text" data-i18n="insight3">If symptoms intensify after work, the pattern is more likely lifestyle- and trigger-driven than structural.</p></li>
-						</ul>
-					</section>
-
 					<section class="story-card">
 						<p class="story-kicker" data-i18n="confidenceKicker">Pattern Confidence</p>
 						<h2 class="story-title" id="confidenceValue">78%</h2>
@@ -673,9 +852,17 @@
 						<div class="signal-bar" aria-hidden="true"><div class="signal-fill" id="confidenceBar" style="width: 78%"></div></div>
 						<p class="story-copy" data-i18n="confidenceNote">This is not a diagnosis. It is a preventive signal that shows where behavioral pressure may be building.</p>
 					</section>
+
+					<section class="story-card">
+						<p class="story-kicker" data-i18n="supportingSummaryKicker">Supporting Clinical Note</p>
+						<h2 class="story-title" data-i18n="supportingSummaryTitle">Numerical scores remain available as supporting information.</h2>
+						<p class="story-copy" data-i18n="supportingSummaryCopy">The physician should first read the clinical summary, interpretation, evidence, and correlations before using the detailed scores below.</p>
+					</section>
 				</div>
 
-				<div class="kpi-grid">
+				<div class="lower-scores">
+					<p class="lower-scores-kicker" data-i18n="supportingScoresKicker">Supporting Information</p>
+					<div class="kpi-grid">
 					<article class="kpi-card">
 						<div class="ring" id="stressRing" data-value="74" data-color="#ffcb84">
 							<svg viewBox="0 0 92 92" aria-hidden="true">
@@ -732,9 +919,9 @@
 							<span class="risk-badge" id="burnoutBadge" data-i18n="monitor">Monitor Weekly</span>
 						</div>
 					</article>
-				</div>
+					</div>
 
-				<div class="layer-grid" aria-label="Layer breakdown" data-i18n-aria="layerGridAria">
+					<div class="layer-grid" aria-label="Layer breakdown" data-i18n-aria="layerGridAria">
 					<article class="layer-card">
 						<span class="layer-tag" data-i18n="layer1Tag">Layer 1</span>
 						<p class="layer-score" id="layer1Score">82</p>
@@ -763,12 +950,12 @@
 						<span class="layer-tag" data-i18n="layer4Tag">Layer 4</span>
 						<p class="layer-score" id="layer4Score">71</p>
 						<p class="layer-label" data-i18n="layer4Label">Temporal & trigger patterns</p>
-						<p class="layer-copy" data-i18n="layer4Copy">The timing of symptoms suggests pressure clusters around work and evening recovery.</p>
+						<p class="layer-copy" data-i18n="layer4Copy">The timing of symptoms suggests pressure clusters around multiple daily stress windows and evening recovery.</p>
 						<div class="signal-bar"><div class="signal-fill" id="layer4Bar" style="width: 71%"></div></div>
 					</article>
 				</div>
 
-				<div class="meta-grid">
+					<div class="meta-grid">
 					<section class="meta-card">
 						<p class="meta-label" data-i18n="finalStressLabel">Stress Load</p>
 						<p class="meta-value" id="finalStressValue">74/100</p>
@@ -785,35 +972,34 @@
 						<p class="meta-copy" data-i18n="finalRecoveryCopy">Recovery is present, but the pattern would benefit from better decompression.</p>
 					</section>
 				</div>
+				</div>
 			</section>
 
-			<aside class="recommendations" aria-label="Recommendations" data-i18n-aria="recommendationsAria">
+			<aside class="recommendations" aria-label="Clinical considerations" data-i18n-aria="recommendationsAria">
 				<section class="rec-card">
-					<p class="rec-title" data-i18n="intakeSnapshot">Intake Snapshot</p>
-					<h3 class="rec-heading" data-i18n="intakeHeading">Reported Symptoms</h3>
+					<p class="rec-title" data-i18n="considerationsTitle">Clinical Considerations</p>
+					<h3 class="rec-heading" data-i18n="considerationsHeading">Suggested physician considerations</h3>
+					<ul class="consideration-list" id="considerationList"></ul>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="patientGuidanceTitle">Patient Guidance</p>
+					<h3 class="rec-heading" data-i18n="patientGuidanceHeading">Simple behavioral advice</h3>
+					<ul class="guidance-list" id="guidanceList"></ul>
+				</section>
+
+				<section class="rec-card">
+					<p class="rec-title" data-i18n="intakeSnapshot">Reported Symptoms</p>
+					<h3 class="rec-heading" data-i18n="intakeHeading">Intake context</h3>
 					<p class="rec-copy" id="symptomSummary" data-i18n="intakeFallback">No symptom text was provided from the intake page.</p>
 					<span class="rec-chip" data-i18n="intakeChip">Context Signal</span>
 				</section>
 
 				<section class="rec-card">
-					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
-					<h3 class="rec-heading" data-i18n="rec1Heading">Reduce evening stimulation</h3>
-					<p class="rec-copy" data-i18n="rec1Copy">Limit caffeine after 2:00 PM and adopt a 45-minute wind-down routine before sleep.</p>
-					<span class="rec-chip" data-i18n="rec1Chip">Sleep Recovery</span>
-				</section>
-
-				<section class="rec-card">
-					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
-					<h3 class="rec-heading" data-i18n="rec2Heading">Schedule stress offloading</h3>
-					<p class="rec-copy" data-i18n="rec2Copy">Add two 10-minute breathing or walking breaks during high-demand periods each day.</p>
-					<span class="rec-chip" data-i18n="rec2Chip">Stress Regulation</span>
-				</section>
-
-				<section class="rec-card">
-					<p class="rec-title" data-i18n="recommendation">Recommendation</p>
-					<h3 class="rec-heading" data-i18n="rec3Heading">Reinforce active recovery</h3>
-					<p class="rec-copy" data-i18n="rec3Copy">Target 4 light activity sessions weekly to support mood stabilization and cognitive reset.</p>
-					<span class="rec-chip" data-i18n="rec3Chip">Behavioral Activation</span>
+					<p class="rec-title" data-i18n="reportNoteTitle">Report Note</p>
+					<h3 class="rec-heading" data-i18n="reportNoteHeading">Clinical judgment remains with the physician</h3>
+					<p class="rec-copy" data-i18n="reportNoteCopy">This page highlights behavioral biomarkers and lifestyle factors that may influence symptom presentation. It does not diagnose anxiety, depression, IBS, fibromyalgia, or any disease.</p>
+					<span class="rec-chip" data-i18n="reportNoteChip">Non-diagnostic</span>
 				</section>
 
 				<section class="rec-card">
@@ -821,7 +1007,7 @@
 					<h3 class="rec-heading" data-i18n="nextHeading">Clinical follow-up cadence</h3>
 					<p class="rec-copy" data-i18n="nextCopy">Review these indicators in 7 days to identify trend direction and intervention response.</p>
 					<div class="actions">
-						<a class="btn btn-primary" href="01-symptom-intake.html" data-i18n="startNew">Start New Intake</a>
+						<a class="btn btn-primary" href="index.html" data-i18n="startNew">Start New Intake</a>
 						<a class="btn btn-ghost" href="02-assessment.html" data-i18n="updateAssessment">Update Assessment</a>
 						<a class="btn btn-ghost" href="04-clinician-dashboard.html" data-i18n="openClinician">Open Clinician Dashboard</a>
 						<button class="btn btn-ghost" type="button" id="exportPdfBtn" data-i18n="exportPdf">Export PDF</button>
@@ -862,23 +1048,51 @@
 		};
 
 		let symptomText = "";
+		let reportFactors = {
+			stressDomains: [],
+			sleepRisk: 0,
+			stressRisk: 0,
+			recoveryRisk: 0,
+			muscleTensionRisk: 0,
+			triggerRisk: 0,
+			energyRisk: 0,
+			caffeineRisk: 0
+		};
 
 		const translations = {
 			en: {
-				documentTitle: "Behavioral Biomarkers Dashboard",
-				brandTitle: "Behavioral Biomarkers Dashboard",
-				brandSubtitle: "Clinical Results Overview",
-				snapshot: "Clinician-Ready Snapshot",
-				overview: "Outcome Overview",
-				profileTitle: "Your behavioral health signal profile",
-				profileLead: "Scores below summarize current behavioral biomarkers and recovery indicators. Use them as guidance for triage planning and focused lifestyle interventions.",
-				storyKicker: "Clinical Interpretation",
-				storyTitle: "The pattern suggests stress-linked strain rather than a single isolated symptom.",
-				storyCopy: "The system is reading the symptom story through sleep quality, emotional load, lifestyle habits, and trigger timing to show why the pattern matters before it becomes persistent.",
+				documentTitle: "Behavioral Biomarkers CDSS Report",
+				brandTitle: "Behavioral CDSS Report",
+				brandSubtitle: "Clinical Decision Support",
+				snapshot: "CDSS View",
+				summaryAria: "Clinical summary",
+				cdssOverview: "Clinical Decision Support Report",
+				cdssTitle: "Behavioral Biomarkers Clinical Review",
+				cdssLead: "This report does not diagnose disease or mental disorders. It helps the physician judge whether behavioral biomarkers and lifestyle factors may be contributing to the patient's symptoms.",
+				overallIndexLabel: "Overall Behavioral Biomarkers Index",
+				overallIndexNote: "Overall burden appears clinically relevant and should be interpreted with the history and examination.",
+				burdenLabel: "Behavioral Burden",
+				burdenNote: "The profile shows enough pressure to potentially influence symptom persistence.",
+				sleepSummaryLabel: "Sleep Quality",
+				sleepSummaryNote: "Sleep signals should be reviewed as part of the symptom workup.",
+				stressSummaryLabel: "Stress Response",
+				stressSummaryNote: "The stress pattern may be clinically relevant to symptom amplification.",
+				recoverySummaryLabel: "Recovery Capacity",
+				recoverySummaryNote: "Recovery capacity appears present but may be insufficient under current load.",
+				interpretationKicker: "Clinical Interpretation",
+				interpretationCopy: "These findings should be considered together with clinical examination, medical history, and the timing of symptoms. The report does not diagnose a condition; it highlights behavioral factors that may be clinically relevant.",
+				evidenceKicker: "Evidence Behind the Analysis",
+				evidenceTitle: "Why the system reached this conclusion",
+				correlationsKicker: "Behavioral Correlations",
+				correlationsTitle: "Possible relationships supported by the responses",
+				supportingSummaryKicker: "Supporting Clinical Note",
+				supportingSummaryTitle: "Numerical scores remain available as supporting information.",
+				supportingSummaryCopy: "The physician should first read the clinical summary, interpretation, evidence, and correlations before using the detailed scores below.",
+				supportingScoresKicker: "Supporting Information",
 				insightListAria: "Key insights",
 				insight1: "The strongest signal is daytime stress pressure that can amplify physical symptoms.",
 				insight2: "Recovery looks possible, but it depends on better sleep consistency and lower evening stimulation.",
-				insight3: "If symptoms intensify after work, the pattern is more likely lifestyle- and trigger-driven than structural.",
+				insight3: "If symptoms intensify during family, financial, study, or work pressure windows, the pattern is more likely trigger-driven than structural.",
 				confidenceKicker: "Pattern Confidence",
 				confidenceCopy: "Confidence increases when symptoms, sleep, stress, and trigger timing point in the same direction.",
 				confidenceNote: "This is not a diagnosis. It is a preventive signal that shows where behavioral pressure may be building.",
@@ -894,7 +1108,7 @@
 				layer3Copy: "Movement and stimulation habits are moderate, leaving room for recovery support.",
 				layer4Tag: "Layer 4",
 				layer4Label: "Temporal & trigger patterns",
-				layer4Copy: "The timing of symptoms suggests pressure clusters around work and evening recovery.",
+				layer4Copy: "The timing of symptoms suggests pressure clusters around multiple daily stress windows and evening recovery.",
 				finalStressLabel: "Stress Load",
 				finalStressCopy: "High enough to explain amplified symptoms and reduced tolerance.",
 				finalSleepLabel: "Sleep Quality",
@@ -910,21 +1124,15 @@
 				burnoutTitle: "Burnout Risk",
 				burnoutMeta: "Intermediate risk pattern detected based on stress, sleep, and activity profile.",
 				monitor: "Monitor Weekly",
-				recommendationsAria: "Recommendations",
-				intakeSnapshot: "Intake Snapshot",
-				intakeHeading: "Reported Symptoms",
+				recommendationsAria: "Clinical Considerations",
+				considerationsTitle: "Clinical Considerations",
+				considerationsHeading: "Suggested physician considerations",
+				patientGuidanceTitle: "Patient Guidance",
+				patientGuidanceHeading: "Simple behavioral advice",
+				intakeSnapshot: "Reported Symptoms",
+				intakeHeading: "Intake context",
 				intakeFallback: "No symptom text was provided from the intake page.",
 				intakeChip: "Context Signal",
-				recommendation: "Recommendation",
-				rec1Heading: "Reduce evening stimulation",
-				rec1Copy: "Limit caffeine after 2:00 PM and adopt a 45-minute wind-down routine before sleep.",
-				rec1Chip: "Sleep Recovery",
-				rec2Heading: "Schedule stress offloading",
-				rec2Copy: "Add two 10-minute breathing or walking breaks during high-demand periods each day.",
-				rec2Chip: "Stress Regulation",
-				rec3Heading: "Reinforce active recovery",
-				rec3Copy: "Target 4 light activity sessions weekly to support mood stabilization and cognitive reset.",
-				rec3Chip: "Behavioral Activation",
 				nextStep: "Next Step",
 				nextHeading: "Clinical follow-up cadence",
 				nextCopy: "Review these indicators in 7 days to identify trend direction and intervention response.",
@@ -937,20 +1145,41 @@
 				riskHigh: "High Priority"
 			},
 			ar: {
-				documentTitle: "لوحة المؤشرات الحيوية السلوكية",
+				documentTitle: "تقرير CDSS للمؤشرات الحيوية السلوكية",
 				brandTitle: "لوحة المؤشرات الحيوية السلوكية",
-				brandSubtitle: "نظرة عامة على النتائج السريرية",
-				snapshot: "ملخص جاهز للطبيب",
-				overview: "ملخص النتائج",
-				profileTitle: "ملف إشارات الصحة السلوكية الخاص بك",
-				profileLead: "الدرجات أدناه تلخّص المؤشرات الحيوية السلوكية الحالية ومؤشرات التعافي. استخدمها كإرشاد لتخطيط الفرز والتدخلات السلوكية المركزة.",
+				brandSubtitle: "دعم القرار السريري",
+				snapshot: "عرض CDSS",
+				summaryAria: "الملخص السريري",
+				cdssOverview: "تقرير دعم القرار السريري",
+				cdssTitle: "مراجعة المؤشرات الحيوية السلوكية",
+				cdssLead: "هذا التقرير لا يشخّص مرضًا أو اضطرابًا نفسيًا. هدفه مساعدة الطبيب على تحديد ما إذا كانت المؤشرات السلوكية ونمط الحياة قد تساهم في الأعراض الحالية للمريض.",
+				overallIndexLabel: "المؤشر الكلي للمؤشرات الحيوية السلوكية",
+				overallIndexNote: "يبدو العبء العام ذا صلة سريرية ويجب تفسيره مع التاريخ المرضي والفحص.",
+				burdenLabel: "العبء السلوكي",
+				burdenNote: "يوجد مستوى ضغط قد يساهم في استمرار الأعراض أو شدتها.",
+				sleepSummaryLabel: "جودة النوم",
+				sleepSummaryNote: "إشارات النوم تستحق المراجعة ضمن تقييم الأعراض.",
+				stressSummaryLabel: "استجابة التوتر",
+				stressSummaryNote: "قد يكون نمط التوتر ذا صلة بتضخيم الأعراض.",
+				recoverySummaryLabel: "قدرة التعافي",
+				recoverySummaryNote: "قد تكون قدرة التعافي موجودة لكن غير كافية أمام العبء الحالي.",
+				interpretationKicker: "التفسير السريري",
+				interpretationCopy: "ينبغي تفسير هذه النتائج مع الفحص السريري والتاريخ المرضي وتوقيت الأعراض. التقرير لا يشخّص حالة محددة؛ بل يبرز العوامل السلوكية التي قد تكون ذات صلة سريريًا.",
+				evidenceKicker: "الأدلة وراء التحليل",
+				evidenceTitle: "لماذا وصل النظام إلى هذا الاستنتاج",
+				correlationsKicker: "الارتباطات السلوكية",
+				correlationsTitle: "علاقات محتملة مدعومة بإجابات المريض",
+				supportingSummaryKicker: "ملاحظة سريرية داعمة",
+				supportingSummaryTitle: "الأرقام تظل معلومات مساندة فقط.",
+				supportingSummaryCopy: "يفضل أن يقرأ الطبيب الملخص السريري والتفسير والأدلة والارتباطات قبل الرجوع إلى الأرقام التفصيلية أدناه.",
+				supportingScoresKicker: "معلومات داعمة",
 				storyKicker: "التفسير السريري",
 				storyTitle: "النمط يشير إلى ضغط مرتبط بالتوتر أكثر من كونه عرضاً منفرداً.",
 				storyCopy: "يقوم النظام بقراءة قصة الأعراض عبر النوم، والحمل النفسي، وعادات نمط الحياة، وتوقيت المحفزات ليُظهر لماذا يهم هذا النمط قبل أن يصبح مستمراً.",
 				insightListAria: "أهم الإشارات",
 				insight1: "أقوى إشارة هي ضغط التوتر خلال اليوم، وقد يزيد من شدة الأعراض الجسدية.",
 				insight2: "التعافي ممكن، لكنه يحتاج إلى انتظام أفضل في النوم وتقليل التنبيه المسائي.",
-				insight3: "إذا كانت الأعراض تتفاقم بعد العمل، فالنمط أقرب إلى نمط مرتبط بنمط الحياة والمحفزات وليس سبباً بنيوياً منفرداً.",
+				insight3: "إذا كانت الأعراض تتفاقم خلال ضغوط الأسرة أو المال أو الدراسة أو العمل، فالنمط غالبًا مرتبط بالمحفزات أكثر من كونه سببًا بنيويًا منفردًا.",
 				confidenceKicker: "ثقة النمط",
 				confidenceCopy: "ترتفع الثقة عندما تشير الأعراض والنوم والتوتر وتوقيت المحفزات إلى الاتجاه نفسه.",
 				confidenceNote: "هذا ليس تشخيصاً. إنه إشارة وقائية توضّح أين يتراكم الضغط السلوكي.",
@@ -966,7 +1195,7 @@
 				layer3Copy: "النشاط والتنبيه اليومي متوسطان، ما يترك مساحة لدعم التعافي.",
 				layer4Tag: "الطبقة 4",
 				layer4Label: "الزمن وأنماط المحفزات",
-				layer4Copy: "توقيت الأعراض يوحي بتجمع الضغط حول العمل وفترات الاستشفاء المسائية.",
+				layer4Copy: "توقيت الأعراض يوحي بتجمع الضغط عبر نوافذ ضغط يومية متعددة مع تأثير واضح على الاستشفاء المسائي.",
 				finalStressLabel: "عبء التوتر",
 				finalStressCopy: "مرتفع بما يكفي لتفسير تضخم الأعراض وانخفاض التحمل.",
 				finalSleepLabel: "جودة النوم",
@@ -982,21 +1211,15 @@
 				burnoutTitle: "خطر الاحتراق النفسي",
 				burnoutMeta: "تم اكتشاف نمط خطر متوسط بالاعتماد على التوتر والنوم والنشاط.",
 				monitor: "راقب أسبوعيًا",
-				recommendationsAria: "التوصيات",
-				intakeSnapshot: "ملخص الإدخال",
-				intakeHeading: "الأعراض المبلّغ عنها",
+				recommendationsAria: "الاعتبارات السريرية",
+				considerationsTitle: "الاعتبارات السريرية",
+				considerationsHeading: "اعتبارات مقترحة للطبيب",
+				patientGuidanceTitle: "إرشادات للمريض",
+				patientGuidanceHeading: "نصائح سلوكية بسيطة",
+				intakeSnapshot: "الأعراض المبلّغ عنها",
+				intakeHeading: "سياق الإدخال",
 				intakeFallback: "لم يتم تمرير نص الأعراض من صفحة الإدخال.",
 				intakeChip: "إشارة سياقية",
-				recommendation: "توصية",
-				rec1Heading: "تقليل التنبيه المسائي",
-				rec1Copy: "قلل الكافيين بعد الساعة 2 ظهرًا واعتمد روتين تهدئة لمدة 45 دقيقة قبل النوم.",
-				rec1Chip: "تعافي النوم",
-				rec2Heading: "جدولة تفريغ التوتر",
-				rec2Copy: "أضف فترتي راحة يوميًا لمدة 10 دقائق للتنفس أو المشي خلال فترات الضغط العالية.",
-				rec2Chip: "تنظيم التوتر",
-				rec3Heading: "تعزيز التعافي النشط",
-				rec3Copy: "استهدف 4 جلسات نشاط خفيف أسبوعيًا لدعم استقرار المزاج وإعادة التوازن الذهني.",
-				rec3Chip: "التنشيط السلوكي",
 				nextStep: "الخطوة التالية",
 				nextHeading: "وتيرة المتابعة السريرية",
 				nextCopy: "راجع هذه المؤشرات خلال 7 أيام لتحديد اتجاه التحسن والاستجابة للتدخل.",
@@ -1020,6 +1243,75 @@
 				return fallback;
 			}
 			return clamp(parsed, 0, 10);
+		}
+
+		function readOptionalScore(params, key) {
+			const raw = params.get(key);
+			if (raw === null || String(raw).trim() === "") {
+				return null;
+			}
+
+			const parsed = Number(raw);
+			if (Number.isNaN(parsed)) {
+				return null;
+			}
+			return clamp(parsed, 0, 10);
+		}
+
+		function deriveCoreFromExpanded(params, fallbackCore) {
+			const expanded = {
+				sleepHours: readOptionalScore(params, "sleepHours"),
+				sleepContinuity: readOptionalScore(params, "sleepContinuity"),
+				sleepLatency: readOptionalScore(params, "sleepLatency"),
+				perceivedStress: readOptionalScore(params, "perceivedStress"),
+				emotionalExhaustion: readOptionalScore(params, "emotionalExhaustion"),
+				concentrationDifficulty: readOptionalScore(params, "concentrationDifficulty"),
+				activityFrequency: readOptionalScore(params, "activityFrequency"),
+				sedentaryHours: readOptionalScore(params, "sedentaryHours"),
+				caffeineIntake: readOptionalScore(params, "caffeineIntake"),
+				hydrationQuality: readOptionalScore(params, "hydrationQuality"),
+				muscleTension: readOptionalScore(params, "muscleTension"),
+				workTriggeredSymptoms: readOptionalScore(params, "workTriggeredSymptoms")
+			};
+
+			const average = (...values) => {
+				const safe = values.filter((value) => Number.isFinite(value));
+				if (!safe.length) {
+					return null;
+				}
+				return clamp(Number((safe.reduce((sum, value) => sum + value, 0) / safe.length).toFixed(2)), 0, 10);
+			};
+
+			const sleep = average(
+				expanded.sleepHours,
+				expanded.sleepContinuity,
+				expanded.sleepLatency === null ? null : 10 - expanded.sleepLatency
+			);
+
+			const stress = average(
+				expanded.perceivedStress,
+				expanded.emotionalExhaustion,
+				expanded.concentrationDifficulty,
+				expanded.muscleTension,
+				expanded.workTriggeredSymptoms
+			);
+
+			const exercise = average(
+				expanded.activityFrequency,
+				expanded.sedentaryHours === null ? null : 10 - expanded.sedentaryHours
+			);
+
+			const caffeine = average(expanded.caffeineIntake);
+
+			return {
+				core: {
+					sleep: sleep === null ? fallbackCore.sleep : sleep,
+					stress: stress === null ? fallbackCore.stress : stress,
+					exercise: exercise === null ? fallbackCore.exercise : exercise,
+					caffeine: caffeine === null ? fallbackCore.caffeine : caffeine
+				},
+				expanded
+			};
 		}
 
 		function buildLocalScores({ sleep, stress, exercise, caffeine }) {
@@ -1063,10 +1355,21 @@
 		}
 
 		function updateDynamicContent() {
+			const burdenLabel = computedScores.burnout >= 70 ? (currentLanguage() === "ar" ? "مرتفع" : "High") : computedScores.burnout >= 40 ? (currentLanguage() === "ar" ? "متوسط" : "Moderate") : (currentLanguage() === "ar" ? "منخفض" : "Low");
+			const burdenNote = currentLanguage() === "ar"
+				? (computedScores.burnout >= 70 ? "العبء مرتفع بما يكفي ليكون ذا صلة سريرية واضحة." : computedScores.burnout >= 40 ? "العبء متوسط وقد يساهم في الأعراض الحالية." : "العبء منخفض نسبيًا لكن لا يلغي التأثير السلوكي.")
+				: (computedScores.burnout >= 70 ? "The burden is high enough to be clinically relevant." : computedScores.burnout >= 40 ? "The burden is moderate and may contribute to current symptoms." : "The burden is relatively low, but behavioral influence is still possible.");
+
 			ringValueEls.stress.textContent = String(computedScores.stress);
 			ringValueEls.sleep.textContent = String(computedScores.sleep);
 			ringValueEls.recovery.textContent = String(computedScores.recovery);
 			ringValueEls.burnout.textContent = String(computedScores.burnout);
+			document.getElementById("overallIndexValue").textContent = `${layerScores.confidence}%`;
+			document.getElementById("burdenLabelValue").textContent = burdenLabel;
+			document.getElementById("burdenLabelNote").textContent = burdenNote;
+			document.getElementById("sleepSummaryValue").textContent = `${computedScores.sleep}/100`;
+			document.getElementById("stressSummaryValue").textContent = `${computedScores.stress}/100`;
+			document.getElementById("recoverySummaryValue").textContent = `${computedScores.recovery}/100`;
 			document.getElementById("finalStressValue").textContent = `${computedScores.stress}/100`;
 			document.getElementById("finalSleepValue").textContent = `${computedScores.sleep}/100`;
 			document.getElementById("finalRecoveryValue").textContent = `${computedScores.recovery}/100`;
@@ -1101,6 +1404,109 @@
 			} else {
 				burnoutBadge.textContent = translations[lang].riskLow;
 			}
+
+			document.getElementById("clinicalInterpretation").textContent = lang === "ar"
+				? `تشير صورة المؤشرات السلوكية إلى أن جودة النوم واستجابة التوتر وقدرة التعافي قد تساهم في استمرار الأعراض أو شدتها. يجب تفسير هذه النتائج مع الفحص السريري والتاريخ المرضي، دون اعتبارها تشخيصًا.`
+				: `The behavioral profile suggests that sleep quality, stress exposure, and reduced recovery capacity may contribute to the persistence or severity of the patient's symptoms. These findings should be considered together with clinical examination and medical history.`;
+
+			const evidenceItems = buildEvidenceItems(lang);
+			document.getElementById("evidenceList").innerHTML = evidenceItems.map((item) => `<li>${item}</li>`).join("");
+
+			const correlationItems = buildCorrelationItems(lang);
+			document.getElementById("correlationList").innerHTML = correlationItems.map((item) => `<article class="correlation-card"><p class="correlation-chain">${item.chain}</p><p class="correlation-note">${item.note}</p></article>`).join("");
+
+			document.getElementById("considerationList").innerHTML = buildConsiderations(lang).map((item) => `<li>${item}</li>`).join("");
+			document.getElementById("guidanceList").innerHTML = buildGuidance(lang).map((item) => `<li>${item}</li>`).join("");
+		}
+
+		function buildEvidenceItems(lang) {
+			const items = [];
+			if (reportFactors.sleepRisk >= 5) items.push(lang === "ar" ? "مدة/جودة نوم أقل من المستوى الموصى به." : "Sleep duration or quality is below the recommended range.");
+			if (reportFactors.stressRisk >= 5) items.push(lang === "ar" ? "توتر ذاتي مرتفع أو متكرر." : "High or frequent self-reported stress.");
+			if (reportFactors.muscleTensionRisk >= 5) items.push(lang === "ar" ? "شد عضلي أو صداع مرتبط بالتوتر متكرر." : "Frequent muscle tension or tension-related headaches.");
+			if (reportFactors.triggerRisk >= 5) items.push(lang === "ar" ? "الأعراض تزداد خلال نوافذ الضغط أو بعد المحفزات اليومية." : "Symptoms increase during stress windows or after daily triggers.");
+			if (reportFactors.recoveryRisk >= 5) items.push(lang === "ar" ? "أنماط تعافٍ محدودة مثل التهدئة أو الراحة المنظمة." : "Limited recovery behaviors such as structured rest or calming routines.");
+			if (reportFactors.caffeineRisk >= 5) items.push(lang === "ar" ? "تعرض مرتفع للمنبهات أو ترطيب غير كافٍ." : "Higher stimulant exposure or insufficient hydration.");
+			if (reportFactors.stressDomains.length) items.push(lang === "ar" ? `مصادر الضغط المبلغ عنها: ${reportFactors.stressDomains.join("، ")}.` : `Reported stress domains: ${reportFactors.stressDomains.join(", ")}.`);
+			if (!items.length) items.push(lang === "ar" ? "المدخلات تشير إلى ضغوط خفيفة أو متقطعة فقط." : "The inputs suggest only mild or intermittent pressure.");
+			return items;
+		}
+
+		function buildCorrelationItems(lang) {
+			const items = [];
+			if (reportFactors.stressRisk >= 5 && reportFactors.sleepRisk >= 5) {
+				items.push({
+					chain: lang === "ar" ? "توتر مرتفع ↓ نوم أضعف ↓ تعب واستجابة جسدية أعلى" : "High stress ↓ Poor sleep ↓ Fatigue and higher body response",
+					note: lang === "ar" ? "قد يفسر هذا النمط تضخم التعب أو الصداع أو الشد العضلي." : "This pattern may explain fatigue, headache, or muscle tension amplification."
+				});
+			}
+			if (reportFactors.stressRisk >= 5 && reportFactors.triggerRisk >= 5) {
+				items.push({
+					chain: lang === "ar" ? "توتر ↔ الأعراض الجسدية المرتبطة بالضغط" : "Stress ↔ Stress-related physical symptoms",
+					note: lang === "ar" ? "قد ترتبط الأعراض بفترات الضغط أكثر من سبب بنيوي واحد." : "Symptoms may cluster around pressure windows rather than a single structural cause."
+				});
+			}
+			if (reportFactors.sleepRisk >= 5 && reportFactors.energyRisk >= 5) {
+				items.push({
+					chain: lang === "ar" ? "نوم ضعيف ↔ إرهاق نهاري" : "Poor sleep ↔ Daytime fatigue",
+					note: lang === "ar" ? "هذا الارتباط قد يساهم في انخفاض القدرة على التحمل والتركيز." : "This relationship may reduce stamina and concentration."
+				});
+			}
+			if (reportFactors.muscleTensionRisk >= 5 && reportFactors.stressRisk >= 5) {
+				items.push({
+					chain: lang === "ar" ? "توتر عضلي ↔ أعراض جسدية" : "Muscle tension ↔ Physical symptoms",
+					note: lang === "ar" ? "يجب أخذ ذلك في الاعتبار عند تقييم الشد أو الصداع أو الانزعاج الجسدي." : "This should be considered when evaluating tension, headaches, or bodily discomfort."
+				});
+			}
+			if (reportFactors.caffeineRisk >= 5 && reportFactors.sleepRisk >= 5) {
+				items.push({
+					chain: lang === "ar" ? "منبهات أعلى ↔ نوم أقل جودة" : "Higher stimulants ↔ Lower sleep quality",
+					note: lang === "ar" ? "قد يزيد هذا من صعوبة الاستشفاء الليلي." : "This may impair nighttime recovery."
+				});
+			}
+			if (!items.length) {
+				items.push({
+					chain: lang === "ar" ? "الارتباطات السلوكية المحددة غير قوية" : "No strong behavioral correlations identified",
+					note: lang === "ar" ? "لا توجد علاقة قوية بما يكفي لعرضها كارتباط رئيسي." : "There is not enough support to display a dominant correlation."
+				});
+			}
+			return items;
+		}
+
+		function buildConsiderations(lang) {
+			return lang === "ar"
+				? [
+					"مراجعة عادات النوم وتوقيت النوم والاستيقاظ.",
+					"تقييم الضغوط النفسية والاجتماعية والمالية المحيطة بالمريض.",
+					"مراجعة توقيت الأعراض مقارنة بأحداث الضغط اليومية أو الأسبوعية.",
+					"مقارنة الأعراض مع التاريخ المرضي والفحص السريري المعتاد.",
+					"الاستمرار في التقييم الطبي القياسي مع عدم الاعتماد على هذه الصفحة وحدها."
+				]
+				: [
+					"Review sleep habits, bedtime timing, and sleep consistency.",
+					"Assess psychosocial, financial, family, and environmental stressors.",
+					"Compare symptom timing with daily or weekly stress events.",
+					"Correlate symptoms with the medical history and routine physical examination.",
+					"Continue standard medical evaluation and do not rely on this page alone."
+				];
+		}
+
+		function buildGuidance(lang) {
+			return lang === "ar"
+				? [
+					"تحسين روتين النوم والالتزام بوقت نوم ثابت.",
+					"تقليل الكافيين خاصة في أواخر اليوم.",
+					"زيادة شرب المياه إذا كان الترطيب منخفضًا.",
+					"استخدام تمارين تهدئة أو تنفس أو مشي خفيف بانتظام.",
+					"مراقبة ارتباط الأعراض بمواقف الضغط ومشاركتها مع الطبيب."
+				]
+				: [
+					"Improve the sleep routine and keep a consistent bedtime.",
+					"Reduce caffeine, especially later in the day.",
+					"Increase hydration if intake is low.",
+					"Use relaxation, breathing, or light walking regularly.",
+					"Track symptom patterns and share them with the physician."
+				];
 		}
 
 		function setLanguage(lang) {
@@ -1207,11 +1613,31 @@
 		}
 
 		const queryParams = new URLSearchParams(window.location.search);
-		const sleepInput = getScoreFromQuery(queryParams, "sleep", 6);
-		const stressInput = getScoreFromQuery(queryParams, "stress", 7);
-		const exerciseInput = getScoreFromQuery(queryParams, "exercise", 4);
-		const caffeineInput = getScoreFromQuery(queryParams, "caffeine", 5);
+		const rawCore = {
+			sleep: getScoreFromQuery(queryParams, "sleep", 6),
+			stress: getScoreFromQuery(queryParams, "stress", 7),
+			exercise: getScoreFromQuery(queryParams, "exercise", 4),
+			caffeine: getScoreFromQuery(queryParams, "caffeine", 5)
+		};
+		const normalized = deriveCoreFromExpanded(queryParams, rawCore);
+		const sleepInput = normalized.core.sleep;
+		const stressInput = normalized.core.stress;
+		const exerciseInput = normalized.core.exercise;
+		const caffeineInput = normalized.core.caffeine;
 		symptomText = queryParams.get("symptoms") || "";
+		reportFactors = {
+			stressDomains: (symptomText.match(/مصادر الضغط الأساسية:\s*([^\n]+)/)?.[1] || "")
+				.split(/[،,]/)
+				.map((item) => item.trim())
+				.filter(Boolean),
+			sleepRisk: clamp(10 - sleepInput, 0, 10),
+			stressRisk: clamp(stressInput, 0, 10),
+			recoveryRisk: clamp(10 - computedScores.recovery / 10, 0, 10),
+			muscleTensionRisk: clamp(Number(normalized.expanded.muscleTension) || 0, 0, 10),
+			triggerRisk: clamp(Number(normalized.expanded.workTriggeredSymptoms) || 0, 0, 10),
+			energyRisk: clamp(10 - exerciseInput, 0, 10),
+			caffeineRisk: clamp(caffeineInput, 0, 10)
+		};
 
 		computedScores = buildLocalScores({
 			sleep: sleepInput,
@@ -1245,6 +1671,18 @@
 			stress: stressInput,
 			exercise: exerciseInput,
 			caffeine: caffeineInput,
+			sleepHours: normalized.expanded.sleepHours,
+			sleepContinuity: normalized.expanded.sleepContinuity,
+			sleepLatency: normalized.expanded.sleepLatency,
+			perceivedStress: normalized.expanded.perceivedStress,
+			emotionalExhaustion: normalized.expanded.emotionalExhaustion,
+			concentrationDifficulty: normalized.expanded.concentrationDifficulty,
+			activityFrequency: normalized.expanded.activityFrequency,
+			sedentaryHours: normalized.expanded.sedentaryHours,
+			caffeineIntake: normalized.expanded.caffeineIntake,
+			hydrationQuality: normalized.expanded.hydrationQuality,
+			muscleTension: normalized.expanded.muscleTension,
+			workTriggeredSymptoms: normalized.expanded.workTriggeredSymptoms,
 			language: document.documentElement.lang
 		});
 	</script>
